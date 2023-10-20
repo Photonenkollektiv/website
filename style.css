@@ -17,7 +17,8 @@ body {
     left: 0;
     height: 90vh;
     width: 100%;
-    background-image: url("/images/vecteezy_4k-stars-motion-loop-background-for-overlay-your-project-loop-video-footage-moving-through-stars-in-outer-space-the-stars-moving-endless-to-the-camera-3d-rendering-seamless-loop-isolated-on-black_2016656\ \(1\).gif");
+    /* https://www.vecteezy.com/video/2016656-minimal-stars-motion-loop-background-for-project-overlay */
+    background-image: url("/images/starts-bg.gif");
     background-repeat: no-repeat;
     /* stretch background to fit */
     background-size: cover;
