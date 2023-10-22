@@ -19,10 +19,10 @@ const images = [
   "/images/events/20230826_023800.png",
   "/images/events/20230512_224451.jpg",
   "/images/events/signal-2023-03-26-223441_013.jpeg",
-  // "/images/events/IMG_0256.jpeg",
   "/images/events/IMG_0864.JPG",
   "/images/events/IMG_20231018_164354_284.jpg",
   "/images/events/IMG_0031.jpeg",
+  
 ]
 
 const evenImages = images.filter((_, index) => index % 2 === 0);
