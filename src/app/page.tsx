@@ -16,7 +16,7 @@ const images = [
   "/images/events/20230804_025221.jpg",
   "/images/events/signal-2023-05-17-14-44-17-133.jpg",
   "/images/events/20230518_004455.jpg",
-  "/images/events/20230826_023800.jpg",
+  "/images/events/20230826_023800.png",
   "/images/events/20230512_224451.jpg",
   "/images/events/signal-2023-03-26-223441_013.jpeg",
   // "/images/events/IMG_0256.jpeg",
