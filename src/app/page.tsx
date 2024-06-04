@@ -6,23 +6,22 @@ import Modal from 'react-modal';
 import { useState } from "react";
 
 const images = [
-  "/images/events/20230505_215057.jpg",
-  "/images/events/20230819_215627.jpg",
-  "/images/events/signal-2023-02-28-193950.jpeg",
-  "/images/events/20230506_214900.jpg",
-  "/images/events/IMG_0221.jpeg",
-  "/images/events/20230513_235443.jpg",
-  "/images/events/20230804_021519.jpg",
-  "/images/events/20230804_025221.jpg",
-  "/images/events/signal-2023-05-17-14-44-17-133.jpg",
-  "/images/events/20230518_004455.jpg",
-  "/images/events/20230826_023800.png",
-  "/images/events/20230512_224451.jpg",
-  "/images/events/signal-2023-03-26-223441_013.jpeg",
-  "/images/events/IMG_0864.JPG",
-  "/images/events/IMG_20231018_164354_284.jpg",
-  "/images/events/IMG_0031.jpeg",
-  
+  "/images/events/20230819_215627.webp",
+  "/images/events/signal-2023-02-28-193950.webp",
+  "/images/events/20230506_214900.webp",
+  "/images/events/IMG_0221.webp",
+  "/images/events/20230513_235443.webp",
+  "/images/events/20230804_021519.webp",
+  "/images/events/20230804_025221.webp",
+  "/images/events/20230518_004455.webp",
+  "/images/events/20230826_023800.webp",
+  "/images/events/signal-2023-03-26-223441_013.webp",
+  "/images/events/IMG_0864.webp",
+  "/images/events/IMG_0031.webp",
+  "/images/events/20240430_233848.webp",
+  "/images/events/20240503_210821.webp",
+  "/images/events/20240420_203008.webp",
+  "/images/events/20240420_001734.webp",
 ]
 
 const evenImages = images.filter((_, index) => index % 2 === 0);
@@ -84,7 +83,7 @@ export default function Home() {
           <li>Beleuchtung von Veranstaltungen und Partys</li>
           <li>Beschallung durch unsere Anlage vor Ort oder mobil</li>
         </ul>
-        <p>Du bist interessiert oder hast Fragen: melde dich unter <a href="mailto:info@photonenkollektiv.de">info@photonenkollektiv.de</a></p>
+        <p>Du bist interessiert oder hast Fragen: melde dich unter <a href="mailto:info@photonenkollektiv.de" style={{ color: "pink" }}>info@photonenkollektiv.de</a></p>
       </div>
       <div className={styles.footer}>
         <div className={styles.stack}>
