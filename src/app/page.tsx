@@ -83,7 +83,7 @@ export default function Home() {
           <li>Beleuchtung von Veranstaltungen und Partys</li>
           <li>Beschallung durch unsere Anlage vor Ort oder mobil</li>
         </ul>
-        <p>Du bist interessiert oder hast Fragen: melde dich unter <a href="mailto:info@photonenkollektiv.de">info@photonenkollektiv.de</a></p>
+        <p>Du bist interessiert oder hast Fragen: melde dich unter <a href="mailto:info@photonenkollektiv.de" style={{ color: "pink" }}>info@photonenkollektiv.de</a></p>
       </div>
       <div className={styles.footer}>
         <div className={styles.stack}>
