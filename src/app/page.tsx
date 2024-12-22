@@ -66,6 +66,7 @@ export default function Home() {
             }
           </div>
           <div className={styles.column}>
+            <video src="/gled_2024.m4v" />
             {
               // eslint-disable-next-line @next/next/no-img-element
               evenImages.map((image, index) => <img key={image} src={image} alt="Photonenkollektiv" style={
