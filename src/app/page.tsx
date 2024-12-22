@@ -5,27 +5,41 @@ import { Header } from './header'
 import Modal from 'react-modal';
 import { useState } from "react";
 
-const images = [
-  "/images/events/20230819_215627.webp",
-  "/images/events/signal-2023-02-28-193950.webp",
-  "/images/events/20230506_214900.webp",
-  "/images/events/IMG_0221.webp",
-  "/images/events/20230513_235443.webp",
-  "/images/events/20230804_021519.webp",
-  "/images/events/20230804_025221.webp",
-  "/images/events/20230518_004455.webp",
-  "/images/events/20230826_023800.webp",
-  "/images/events/signal-2023-03-26-223441_013.webp",
-  "/images/events/IMG_0864.webp",
-  "/images/events/IMG_0031.webp",
-  "/images/events/20240430_233848.webp",
-  "/images/events/20240503_210821.webp",
-  "/images/events/20240420_203008.webp",
-  "/images/events/20240420_001734.webp",
+
+type MediaType = {
+  type: "image" | "video",
+  src: string,
+  srcAV1?: string,
+}
+const mediaLeft: MediaType[] = [
+  { type: "image", src: "/images/2024/IMG_0822.webp" },
+  { type: "video", src: "/videos/photonen-kirnhalden-24.mp4" },
+  { type: "image", src: "/images/2024/20240119_232427.webp" },
+  { type: "image", src: "/images/2024/20240726_220354.webp" },
+  { type: "image", src: "/images/events/IMG_0221.webp" },
+  { type: "image", src: "/images/events/20230804_021519.webp" },
+  { type: "image", src: "/images/events/20240503_210821.webp" },
+  { type: "image", src: "/images/events/20240420_001734.webp" },
+  { type: "image", src: "/images/events/20230518_004455.webp" },
+  // { type: "image", src: "/images/events/signal-2023-03-26-223441_013.webp" },
+  { type: "image", src: "/images/events/IMG_0031.webp" },
+  { type: "image", src: "/images/events/signal-2023-02-28-193950.webp" },
 ]
 
-const evenImages = images.filter((_, index) => index % 2 === 0);
-const oddImages = images.filter((_, index) => index % 2 !== 0);
+const mediaRight: MediaType[] = [
+  { type: "video", src: "/videos/gled_2024.mp4", srcAV1: "/videos/gled_2024.av1.mp4" },
+  { type: "image", src: "/images/2024/20240822_135753.webp" },
+  { type: "image", src: "/images/2024/photonen-kirnhalden-24-87.webp" },
+  { type: "image", src: "/images/events/20230506_214900.webp" },
+  { type: "image", src: "/images/events/20240420_203008.webp" },
+  { type: "image", src: "/images/events/20230513_235443.webp" },
+  // { type: "image", src: "/images/events/20230804_025221.webp" },
+  { type: "image", src: "/images/events/20230826_023800.webp" },
+  { type: "image", src: "/images/events/20230819_215627.webp" },
+  { type: "image", src: "/images/events/IMG_0864.webp" },
+  { type: "image", src: "/images/events/20240430_233848.webp" },
+  { type: "image", src: "/images/2024/photonen-kirnhalden-24-67.webp" },
+]
 
 const customModalStyles: Modal.Styles = {
   content: {
@@ -43,11 +57,30 @@ const customModalStyles: Modal.Styles = {
 
 };
 
+const VideoOrImage = ({ type, src, srcAV1, setFocusedImage }: MediaType & { setFocusedImage: (image: string) => void }) => {
+  if (type === "image") {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img onClick={() => setFocusedImage(src)} src={src} alt="Photonenkollektiv" style={
+        {
+          cursor: "pointer",
+        }
+      } />
+    )
+  } else {
+    return (
+      <video style={{ width: "100%", marginTop: "32px",marginBottom:"32px" }} controls>
+        {srcAV1 && <source src={srcAV1} type="video/mp4; codecs=av01.0.05M.08" />}
+        <source src={src} type="video/mp4" />
+        Ihr Browser unterstützt das Video-Tag nicht.
+      </video>
+    )
+  }
+}
+
 
 export default function Home() {
   const [focusedImage, setFocusedImage] = useState<string | undefined>(undefined);
-
-  // const handleClick = (index: number) => setIndex(index);
 
   return (
     <>
@@ -57,27 +90,12 @@ export default function Home() {
         <div className={styles.row}>
           <div className={styles.column}>
             {
-              // eslint-disable-next-line @next/next/no-img-element
-              oddImages.map((image, index) => <img key={image} src={image} alt="Photonenkollektiv" style={
-                {
-                  cursor: "pointer",
-                }
-              } onClick={() => setFocusedImage(image)} />)
+              mediaLeft.map((image) => <VideoOrImage setFocusedImage={setFocusedImage} key={image.src} {...image} />)
             }
           </div>
           <div className={styles.column}>
-            <video style={{ width: "100%" }} controls>
-              <source src="/gled_2024.av1.mp4" type="video/mp4; codecs=av01.0.05M.08" />
-              <source src="/gled_2024.mp4" type="video/mp4" />
-              Ihr Browser unterstützt das Video-Tag nicht.
-            </video>
             {
-              // eslint-disable-next-line @next/next/no-img-element
-              evenImages.map((image, index) => <img key={image} src={image} alt="Photonenkollektiv" style={
-                {
-                  cursor: "pointer",
-                }
-              } onClick={() => setFocusedImage(image)} />)
+              mediaRight.map((image) => <VideoOrImage setFocusedImage={setFocusedImage} key={image.src} {...image} />)
             }
           </div>
         </div>
