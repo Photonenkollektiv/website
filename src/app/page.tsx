@@ -4,6 +4,7 @@ import styles from './page.module.css'
 import { Header } from './header'
 import Modal from 'react-modal';
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 
 type MediaType = {
@@ -61,7 +62,7 @@ const VideoOrImage = ({ type, src, srcAV1, setFocusedImage }: MediaType & { setF
   if (type === "image") {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img loading="lazy"  onClick={() => setFocusedImage(src)} src={src} alt="Photonenkollektiv" style={
+      <Image loading="lazy"  onClick={() => setFocusedImage(src)} src={src} alt="Photonenkollektiv" style={
         {
           cursor: "pointer",
         }
@@ -135,13 +136,13 @@ export default function Home() {
         contentLabel="Example Modal"
       >
         <div className={styles.closeBtn} onClick={() => setFocusedImage(undefined)}></div>
-        <img style={{
+        <Image style={{
           height: "99%",
           width: "100%",
           objectFit: "contain",
           overflowX: "hidden",
           overflowY: "hidden",
-        }} src={focusedImage} alt="Photonenkollektiv" />
+        }} src={focusedImage ?? ""} alt="Photonenkollektiv" />
       </Modal>
     </>
   )

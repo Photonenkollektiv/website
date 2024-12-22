@@ -86,3 +86,16 @@ body {
   color: white;
   background-color: black;
 }
+@keyframes svg-shadow {
+  from {
+      filter: drop-shadow(0 0 0px #fff) drop-shadow(0 0 15px #e60073) drop-shadow(0 0 25px #e60073);
+  }
+
+  to {
+
+      filter: drop-shadow(0 0 0px #fff) drop-shadow(0 0 5px #e60073) drop-shadow(0 0 8px #e60073);
+  }
+}
+#logo-glow-path {
+  animation: svg-shadow 3s ease-in-out infinite alternate;
+}

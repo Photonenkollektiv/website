@@ -1,8 +1,4 @@
-import styles from "./page.module.css"
-
-export const Header = () => (<div className={styles.header}>
-    <div className={styles.svgShadow}>
-        <svg viewBox="-50 40 260 380" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="-50 40 260 380" xmlns="http://www.w3.org/2000/svg">
             <g fill="#fff">
                 <path d="M76 0v108a32 28 0 0 0-28 23h63a32 28 0 0 0-26-23V0Z" />
                 <path id="logo-glow-path" d="M80 294a18 18 0 0 0-18 19 18 18 0 0 0 18 18 18 18 0 0 0 18-18 18 18 0 0 0-18-19Z" />
@@ -13,11 +9,3 @@ export const Header = () => (<div className={styles.header}>
                 <path d="M40 139h79s5 1 5 6-5 5-5 5H40s-4-1-4-6c0-4 4-5 4-5z" />
             </g>
         </svg>
-        {/* Für alle aus dem Kollektiv, hier der Downloadlink: https://photonenkollektiv.de/images/logo.svg */}
-    </div>
-    <div className={styles.headerContent}>
-        <h1>Photonenkollektiv</h1>
-
-        <p>Ein Kollektiv zur Förderung der Hör- und Sichtbarkeit von Kulturveranstaltungen</p>
-    </div>
-</div>)
