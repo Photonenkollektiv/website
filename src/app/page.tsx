@@ -3,7 +3,7 @@ import ModalImage from "react-modal-image";
 import styles from './page.module.css'
 import { Header } from './header'
 import Modal from 'react-modal';
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 
 type MediaType = {
@@ -61,7 +61,7 @@ const VideoOrImage = ({ type, src, srcAV1, setFocusedImage }: MediaType & { setF
   if (type === "image") {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img onClick={() => setFocusedImage(src)} src={src} alt="Photonenkollektiv" style={
+      <img loading="lazy"  onClick={() => setFocusedImage(src)} src={src} alt="Photonenkollektiv" style={
         {
           cursor: "pointer",
         }
@@ -81,10 +81,18 @@ const VideoOrImage = ({ type, src, srcAV1, setFocusedImage }: MediaType & { setF
 
 export default function Home() {
   const [focusedImage, setFocusedImage] = useState<string | undefined>(undefined);
+  const backgroundRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const background = backgroundRef.current;
+    if (background) {
+      background.style.backgroundImage = "url('/images/stars-bg.webp')";
+    }
+  }, [backgroundRef])
 
   return (
     <>
-      <div className={styles.background}></div>
+      <div ref={backgroundRef} className={styles.background}></div>
       <Header />
       <div className={styles.gallery}>
         <div className={styles.row}>

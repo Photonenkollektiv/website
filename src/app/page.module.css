@@ -6,7 +6,7 @@
   height: 90vh;
   width: 100%;
   /* https://www.vecteezy.com/video/2016656-minimal-stars-motion-loop-background-for-project-overlay */
-  background-image: url("/images/stars-bg.gif");
+  /* background-image: url("/images/stars-bg.webp"); */
   background-repeat: no-repeat;
   /* stretch background to fit */
   background-size: cover;
