@@ -66,7 +66,11 @@ export default function Home() {
             }
           </div>
           <div className={styles.column}>
-            <video src="/gled_2024.mp4" style={{width:"100%"}} controls/>
+            <video style={{ width: "100%" }} controls>
+              <source src="/gled_2024.av1.mp4" type="video/mp4; codecs=av01.0.05M.08" />
+              <source src="/gled_2024.mp4" type="video/mp4" />
+              Ihr Browser unterstützt das Video-Tag nicht.
+            </video>
             {
               // eslint-disable-next-line @next/next/no-img-element
               evenImages.map((image, index) => <img key={image} src={image} alt="Photonenkollektiv" style={
