@@ -18,6 +18,6 @@ export const Header = () => (<div className={styles.header}>
     <div className={styles.headerContent}>
         <h1>Photonenkollektiv</h1>
 
-        <p>Ein Kollektiv zur Förderung der Hör- und Sichtbarkeit von Kulturveranstaltungen</p>
+        <p>Ein Verein zur Förderung der Hör- und Sichtbarkeit von Kulturveranstaltungen</p>
     </div>
 </div>)
