@@ -10,8 +10,21 @@ type MediaType = {
   src: string,
   srcAV1?: string,
 }
-const mediaLeft: MediaType[] = [
+
+const mediaTotal: MediaType[] = [
+  { type: "image", src: "/images/2025/01.webp" },
+  { type: "image", src: "/images/2025/10.webp" },
+  { type: "image", src: "/images/2025/08.webp" },
+  { type: "image", src: "/images/2025/02.webp" },
+  { type: "image", src: "/images/2025/09.webp" },
+  { type: "image", src: "/images/2025/06.webp" },
+  { type: "image", src: "/images/2025/03.webp" },
+  { type: "image", src: "/images/2025/04.webp" },
+  { type: "image", src: "/images/2025/05.webp" },
+  { type: "image", src: "/images/2025/07.webp" },
   { type: "image", src: "/images/2024/IMG_0822.webp" },
+  { type: "image", src: "/images/2024/20240822_135753.webp" },
+  { type: "image", src: "/images/2024/photonen-kirnhalden-24-87.webp" },
   // { type: "video", src: "/videos/photonen-kirnhalden-24.mp4" },
   { type: "image", src: "/images/2024/20240119_232427.webp" },
   { type: "image", src: "/images/2024/20240726_220354.webp" },
@@ -23,12 +36,7 @@ const mediaLeft: MediaType[] = [
   // { type: "image", src: "/images/events/signal-2023-03-26-223441_013.webp" },
   { type: "image", src: "/images/events/IMG_0031.webp" },
   { type: "image", src: "/images/events/signal-2023-02-28-193950.webp" },
-]
-
-const mediaRight: MediaType[] = [
   // { type: "video", src: "/videos/gled_2024.mp4", srcAV1: "/videos/gled_2024.av1.mp4" },
-  { type: "image", src: "/images/2024/20240822_135753.webp" },
-  { type: "image", src: "/images/2024/photonen-kirnhalden-24-87.webp" },
   { type: "image", src: "/images/events/20230506_214900.webp" },
   { type: "image", src: "/images/events/20240420_203008.webp" },
   { type: "image", src: "/images/events/20230513_235443.webp" },
@@ -38,9 +46,14 @@ const mediaRight: MediaType[] = [
   { type: "image", src: "/images/events/IMG_0864.webp" },
   { type: "image", src: "/images/events/20240430_233848.webp" },
   { type: "image", src: "/images/2024/photonen-kirnhalden-24-67.webp" },
-]
+];
 
-const mediaTotal = [...mediaLeft, ...mediaRight];
+const featuredMedia: MediaType[] = [
+  { type: "image", src: "/images/2025/01.webp" },
+  { type: "image", src: "/images/2024/IMG_0822.webp" },
+  { type: "image", src: "/images/2025/02.webp" },
+  { type: "image", src: "/images/2025/04.webp" },
+];
 
 const customModalStyles: Modal.Styles = {
   content: {
@@ -153,14 +166,9 @@ export default function Home() {
 
       <section id="gallery">
         <div className="gallery-grid">
-          <img src="/images/demo/stage1.png" alt="Stage photo 1" onClick={() => handleGalleryImageClick("/images/demo/stage1.png")} style={{ cursor: "pointer" }} />
-          <img src="/images/demo/stage2.png" alt="Stage photo 2" onClick={() => handleGalleryImageClick("/images/demo/stage2.png")} style={{ cursor: "pointer" }} />
-          <img src="/images/demo/stage3.png" alt="Stage photo 3" onClick={() => handleGalleryImageClick("/images/demo/stage3.png")} style={{ cursor: "pointer" }} />
-          <img src="/images/demo/stage4.png" alt="Stage photo 4" onClick={() => handleGalleryImageClick("/images/demo/stage4.png")} style={{ cursor: "pointer" }} />
-          {/* <img src="/images/demo/stage5.png" alt="Stage photo 5" onClick={() => handleGalleryImageClick("/images/demo/stage5.png")} style={{ cursor: "pointer" }} />
-          <img src="/images/demo/stage6.png" alt="Stage photo 6" onClick={() => handleGalleryImageClick("/images/demo/stage6.png")} style={{ cursor: "pointer" }} />
-          <img src="/images/demo/stage7.png" alt="Stage photo 7" onClick={() => handleGalleryImageClick("/images/demo/stage7.png")} style={{ cursor: "pointer" }} />
-          <img src="/images/demo/stage8.png" alt="Stage photo 8" onClick={() => handleGalleryImageClick("/images/demo/stage8.png")} style={{ cursor: "pointer" }} /> */}
+          {featuredMedia.map((image) => (
+            <VideoOrImage setFocusedImage={handleGalleryImageClick} key={image.src} {...image} />
+          ))}
         </div>
       </section>
 
