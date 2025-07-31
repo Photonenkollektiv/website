@@ -79,12 +79,12 @@ const VideoOrImage = ({ type, src, srcAV1, setFocusedImage }: MediaType & { setF
   if (type === "image") {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={src} alt="Stage photo" onClick={() => setFocusedImage(src)} style={{ cursor: "pointer" }} />
-      // <Image loading="lazy" onClick={() => setFocusedImage(src)} src={src} alt="Photonenkollektiv" style={
-      //   {
-      //     cursor: "pointer",
-      //   }
-      // } />
+      // <img src={src} alt="Stage photo" onClick={() => setFocusedImage(src)} style={{ cursor: "pointer" }} />
+      <Image width={750} height={500} loading="lazy" onClick={() => setFocusedImage(src)} src={src} alt="Photonenkollektiv" style={{
+          cursor: "pointer",
+          width: "100%",
+          maxHeight: "20vh",
+        }} />
     )
   } else {
     return (
