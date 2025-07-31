@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photonenkollektiv – Eventtechnik & Lichtkunst</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Photonenkollektiv</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">Über uns</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero">
+      <h1>Willkommen beim Photonenkollektiv</h1>
+      <p>Wir bringen Licht und Technik zu euren Events – kreativ, nachhaltig und professionell.</p>
+    </header>
+
+    <!-- Gallery Section -->
+    <section id="gallery">
+      <h2>Impressionen</h2>
+      <div class="gallery-grid">
+        <!-- Eight random stage photos for the gallery; click to enlarge -->
+        <img src="images/demo/stage1.png" alt="Stage photo 1" />
+        <img src="images/demo/stage2.png" alt="Stage photo 2" />
+        <img src="images/demo/stage3.png" alt="Stage photo 3" />
+        <img src="images/demo/stage4.png" alt="Stage photo 4" />
+        <img src="images/demo/stage5.png" alt="Stage photo 5" />
+        <img src="images/demo/stage6.png" alt="Stage photo 6" />
+        <img src="images/demo/stage7.png" alt="Stage photo 7" />
+        <img src="images/demo/stage8.png" alt="Stage photo 8" />
+      </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events">
+      <h2>Nächste Events</h2>
+      <ul class="events-list">
+        <li>
+          <span class="event-date">05.08.2025</span>
+          <span class="event-title">Sommerfest Offenburg</span>
+          <span class="event-desc">Open‑Air Festival mit Livemusik und spektakulären Lichteffekten.</span>
+        </li>
+        <li>
+          <span class="event-date">19.09.2025</span>
+          <span class="event-title">Elektronacht im Club 42</span>
+          <span class="event-desc">Deep House trifft Neonlicht – tanzt die Nacht durch!</span>
+        </li>
+        <li>
+          <span class="event-date">07.10.2025</span>
+          <span class="event-title">Streetfood & Beats</span>
+          <span class="event-desc">Kulinarik, DJs und unsere maßgeschneiderte Bühnenbeleuchtung.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+      <h2>Über uns</h2>
+      <!-- Split layout with description and highlights -->
+      <div class="about-grid">
+        <div class="text">
+          <p>
+            Das Photonenkollektiv ist ein gemeinnütziger Verein aus Offenburg. Unser Herz schlägt
+            für Licht‑ und Eventtechnik – wir unterstützen lokale Festivals, Partys und kulturelle
+            Veranstaltungen mit professioneller Bühnentechnik, kreativen Lichtinstallationen und
+            individuellen Sonderbauten. Unsere Leidenschaft gilt der Verbindung von Technik und
+            Kunst, und wir möchten Erlebnisse schaffen, die lange in Erinnerung bleiben.
+          </p>
+        </div>
+        <div class="highlights">
+          <div class="highlight-item">
+            <span class="icon">🤝</span>
+            <div class="desc">Gemeinnützig und ehrenamtlich engagiert für unsere Region</div>
+          </div>
+          <div class="highlight-item">
+            <span class="icon">🎉</span>
+            <div class="desc">Kreative Konzepte für Festivals, Clubs und Straßenfeste</div>
+          </div>
+          <div class="highlight-item">
+            <span class="icon">⚙️</span>
+            <div class="desc">Individuelle Sonderbauten und nachhaltige Lösungen</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+      <h2>Unsere Leistungen</h2>
+      <div class="service-cards">
+        <div class="service-card">
+          <span class="icon">🎛️</span>
+          <h3>Eventtechnik</h3>
+          <p>Von Ton über Licht bis Video – wir statten eure Veranstaltungen mit modernster Technik aus.</p>
+        </div>
+        <div class="service-card">
+          <span class="icon">💡</span>
+          <h3>Light‑Design</h3>
+          <p>Individuelle Lichtkonzepte, die Atmosphäre schaffen und eure Bühne zum Strahlen bringen.</p>
+        </div>
+        <div class="service-card">
+          <span class="icon">📦</span>
+          <h3>Vermietung</h3>
+          <p>Vermietung von professioneller Veranstaltungstechnik, passend zu euren Bedürfnissen.</p>
+        </div>
+        <div class="service-card">
+          <span class="icon">🔧</span>
+          <h3>Sonderbauten</h3>
+          <p>Wir entwickeln und bauen maßgeschneiderte Komponenten und Installationen für besondere Anforderungen.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2>Kontakt</h2>
+      <form action="#" method="post" class="contact-form">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Dein Name" required />
+
+        <label for="email">E‑Mail</label>
+        <input type="email" id="email" name="email" placeholder="deine@email.de" required />
+
+        <label for="message">Nachricht</label>
+        <textarea id="message" name="message" rows="5" placeholder="Wie können wir helfen?" required></textarea>
+
+        <button type="submit">Absenden</button>
+      </form>
+    </section>
+
+    <!-- Modal for enlarged gallery images -->
+    <div id="img-modal" class="modal">
+      <button class="close" aria-label="Schließen">&times;</button>
+      <img id="modal-image" src="#" alt="Vergrößertes Bild" />
+    </div>
+
+    <footer>
+      © 2025 Photonenkollektiv e.V.
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
