@@ -278,7 +278,7 @@ export default function Home() {
         isOpen={focusedImage !== undefined}
         onRequestClose={() => setFocusedImage(undefined)}
         style={customModalStyles}
-        contentLabel="Example Modal"
+        // contentLabel="Example Modal"
       >
         <button
           className="closeBtn"
