@@ -2,6 +2,7 @@
 import Modal from 'react-modal';
 import Image from "next/image";
 import { useEffect, useState, FormEvent } from 'react';
+import Link from 'next/link';
 
 
 type MediaType = {
@@ -115,8 +116,8 @@ export default function Home() {
       <nav className="navbar">
         <div className="logo" onClick={() => window.location.href = "/"} style={{ cursor: "pointer" }}>Photonenkollektiv</div>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">Über uns</a></li>
+          <li><Link href="/">Home</Link></li>
+          <li><Link href="/about">Über uns</Link></li>
         </ul>
       </nav>
 
