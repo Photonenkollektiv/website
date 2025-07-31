@@ -18,7 +18,7 @@
 
 body {
   font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  background: url('images/demo/bg.png') no-repeat center center fixed;
+  background: url('images/demo/background_no_logo.png') no-repeat center center fixed;
   background-size: cover;
   color: #ffffff;
   line-height: 1.6;
@@ -80,10 +80,11 @@ body::before {
 
 /* hero section */
 .hero {
+  margin-top: -5rem;
   text-align: center;
-  padding: 6rem 2rem 4rem 2rem;
+  padding: 0rem 2rem 4rem 2rem;
   background: rgba(0, 0, 0, 0.5);
-  margin-top: 4rem;
+  /* margin-top: 4rem; */
   border-radius: 12px;
 }
 
@@ -153,15 +154,20 @@ section h2 {
   border-left: 4px solid #f4008f;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: end;
 }
 
 .events-list .event-date {
   font-weight: bold;
   color: #00f1ff;
+  font-size: 1.1rem;
 }
 
 .events-list .event-title {
-  margin-top: 0.3rem;
+  /* margin-top: 0.3rem; */
   font-size: 1.1rem;
   color: #ffffff;
 }
