@@ -133,7 +133,6 @@ export default function Home() {
           /** dont stretch the image **/
           height: "auto",
           maxWidth: "50vh",
-          maxHeight: "50vw",
         }}>
           <svg viewBox="-50 40 260 380" xmlns="http://www.w3.org/2000/svg">
             <g fill="#fff">
