@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import Image from "next/image";
 import { useEffect, useState, FormEvent } from 'react';
 import Link from 'next/link';
+import { RENATE_BACKEND_URL } from './Backend';
 
 
 type MediaType = {
@@ -101,6 +102,7 @@ const VideoOrImage = ({ type, src, srcAV1, setFocusedImage }: MediaType & { setF
 export default function Home() {
   const [focusedImage, setFocusedImage] = useState<string | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [events, setEvents] = useState<{ title: string; startDate: string; endDate: string }[]>([]);
 
   const handleContactFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -121,8 +123,20 @@ export default function Home() {
   };
 
   useEffect(() => {
-
-  })
+    // Fetch next public events from Renate backend
+    const fetchEvents = async () => {
+      try {
+        const base = RENATE_BACKEND_URL;
+        const res = await fetch(`${base}/customerapi/public-events`);
+        if (!res.ok) return;
+        const data = await res.json();
+        setEvents(data);
+      } catch (e) {
+        // ignore on homepage
+      }
+    };
+    fetchEvents();
+  }, [])
 
   return (
     <>
@@ -240,21 +254,22 @@ export default function Home() {
       <section id="events">
         <h2>Nächste Events</h2>
         <ul className="events-list">
-          <li>
-            <span className="event-date">05.08.2025</span>
-            <span className="event-title">Sommerfest Offenburg</span>
-            <span className="event-desc">Open‑Air Festival mit Livemusik und spektakulären Lichteffekten.</span>
-          </li>
-          <li>
-            <span className="event-date">19.09.2025</span>
-            <span className="event-title">Elektronacht im Club 42</span>
-            <span className="event-desc">Deep House trifft Neonlicht – tanzt die Nacht durch!</span>
-          </li>
-          <li>
-            <span className="event-date">07.10.2025</span>
-            <span className="event-title">Streetfood & Beats</span>
-            <span className="event-desc">Kulinarik, DJs und unsere maßgeschneiderte Bühnenbeleuchtung.</span>
-          </li>
+          {events.length === 0 && (
+            <li>
+              <span className="event-title">Aktuell keine öffentlichen Events</span>
+            </li>
+          )}
+          {events.map((e) => {
+            const start = new Date(e.startDate);
+            const end = new Date(e.endDate);
+            const fmt = (d: Date) => d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            return (
+              <li key={e.title + e.startDate}>
+                <span className="event-date">{fmt(start)}{fmt(end) !== fmt(start) ? ` – ${fmt(end)}` : ''}</span>
+                <span className="event-title">{e.title || 'Event'}</span>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
