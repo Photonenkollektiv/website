@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font CSS variables for Tailwind font families */
+:root {
+  --font-inter: 'Inter', sans-serif;
+  --font-akony: 'Akony', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+@keyframes pulse-slow { 0%,100% { opacity:0.9; filter:blur(30px);} 50% { opacity:0.6; filter:blur(40px);} }
+.follow-mouse { transition: transform .2s ease-out; will-change: transform; }

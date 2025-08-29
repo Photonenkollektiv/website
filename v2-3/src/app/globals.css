@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define CSS variables to make the fonts available to Tailwind's fontFamily utility */
+:root {
+  --font-inter: 'Inter', sans-serif;
+  --font-akony: 'Akony', sans-serif;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbars on smaller elements where overflow is hidden */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom animation for slow pulsing used on the hero glow */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.9; filter: blur(30px); }
+  50% { opacity: 0.6; filter: blur(40px); }
+}
+
+/* Provide a class that gently follows the mouse for parallax effects */
+.follow-mouse {
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
