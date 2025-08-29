@@ -17,10 +17,10 @@
 }
 
 body {
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-inter, "Inter"), "Helvetica Neue", Arial, sans-serif;
   background: url('images/demo/background_no_logo.png') no-repeat center center fixed;
   background-size: cover;
-  color: #ffffff;
+  color: #EBE7EB;
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -31,7 +31,7 @@ body {
 :root {
   --pk-black: #050505;
   --pk-grey: #111;
-  --pk-white: #ffffff;
+  --pk-white: #EBE7EB;
   --pk-pink: #f4008f;
   --pk-cyan: #00f1ff;
   --pk-radius-sm: 6px;
@@ -251,8 +251,18 @@ section.align-left { margin-right:clamp(0rem,6vw,6rem); }
 section.align-right { margin-left:clamp(0rem,6vw,6rem); }
 @media (max-width:900px){ section.align-left, section.align-right { margin-left:auto; margin-right:auto; } }
 /* side rail accent (optional) */
-.section-rail { position:absolute; top:0; bottom:0; width:12px; left:0; background:linear-gradient(var(--pk-white),var(--pk-pink),var(--pk-cyan)); border-radius:8px; box-shadow:0 0 0 2px #000, 0 0 14px -4px var(--pk-cyan); opacity:.75; }
-section.align-right .section-rail { left:auto; right:0; }
+/* Section rail: simple embedded stripe. For standard sections we keep the element.
+  For with-picto sections we hide the element and paint the stripe via ::after to avoid a detached rounded pill. */
+.section-rail { position:absolute; top:0; bottom:0; width:12px; left:0; background:linear-gradient(var(--pk-white),var(--pk-pink),var(--pk-cyan)); border-top-left-radius:inherit; border-bottom-left-radius:inherit; box-shadow:0 0 0 2px #000, 0 0 14px -4px var(--pk-cyan); opacity:.6; pointer-events:none; }
+section.align-right .section-rail { left:auto; right:0; border-top-right-radius:inherit; border-bottom-right-radius:inherit; border-top-left-radius:0; border-bottom-left-radius:0; }
+
+/* with-picto: remove separate element and simulate stripe as part of section so curvature is continuous */
+section.with-picto .section-rail { display:none; }
+/* section.with-picto::after { content:""; position:absolute; top:0; bottom:0; width:12px; left:0; background:linear-gradient(var(--pk-white),var(--pk-pink),var(--pk-cyan)); border-top-left-radius:inherit; border-bottom-left-radius:inherit; box-shadow:0 0 0 2px #000, 0 0 14px -4px var(--pk-cyan); opacity:.55; pointer-events:none; } */
+section.with-picto.align-right::after { left:auto; right:0; border-top-right-radius:inherit; border-bottom-right-radius:inherit; border-top-left-radius:0; border-bottom-left-radius:0; }
+/* Ensure with-picto sections (which have overflow visible) still visually merge rail + container */
+section.with-picto .section-rail { border-top-left-radius:inherit; border-bottom-left-radius:inherit; }
+section.with-picto.align-right .section-rail { border-top-right-radius:inherit; border-bottom-right-radius:inherit; }
 /* ========================================================= */
 /* Section pictograms                                        */
 /* ========================================================= */
@@ -313,14 +323,14 @@ body.dark #scroll-spine path { mix-blend-mode:screen; }
 @media (max-width:900px){ #scroll-spine path { stroke-width:3; } }
 
 section h2 {
-  font-family:'Anton',Impact,'Arial Black',sans-serif;
+  font-family: var(--font-akony, 'Akony'), var(--font-inter, 'Inter'), sans-serif;
   letter-spacing:.04em;
   margin-bottom:2.2rem;
   font-size: clamp(2.3rem,5vw,3.5rem);
   text-align:left;
   color: var(--pk-white);
-  -webkit-text-stroke:1px #000;
-  text-shadow:3px 3px 0 #000, 6px 6px 0 var(--pk-pink), 9px 9px 0 var(--pk-cyan);
+  /* -webkit-text-stroke:1px #000; */
+  text-shadow: 6px 6px 0 var(--pk-pink);
   position:relative;
   display:inline-block;
   padding:0 .1rem .35rem;
@@ -331,8 +341,20 @@ section h2 {
 section h2:after {
   content:"";
   position:absolute; left:0; bottom:0; height:6px; width:100%;
-  background:linear-gradient(90deg,var(--pk-white) 0 35%, var(--pk-pink) 35% 65%, var(--pk-cyan) 65% 100%);
-  box-shadow:0 2px 0 #000, 0 4px 0 var(--pk-pink), 0 6px 0 var(--pk-cyan);
+  /* Animated gradient bar: create a symmetric gradient so the loop is seamless */
+  background:linear-gradient(90deg,
+    var(--pk-pink) 0%,
+    var(--pk-pink) 30%,
+    var(--pk-cyan) 50%,
+    var(--pk-pink) 70%,
+    var(--pk-pink) 100%);
+  background-size:200% 100%;
+  animation:h2GradientPan 18s linear infinite;
+}
+
+@keyframes h2GradientPan {
+  0% { background-position:0% 50%; }
+  100% { background-position:-200% 50%; }
 }
 
 /* Mobile responsive sections */

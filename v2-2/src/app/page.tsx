@@ -4,6 +4,12 @@ import Image from "next/image";
 import { useEffect, useState, FormEvent } from 'react';
 import Link from 'next/link';
 import Hero from '../components/Hero';
+import FeaturedGallerySection from '../components/FeaturedGallerySection';
+import AboutSection from '../components/AboutSection';
+import ServicesSection from '../components/ServicesSection';
+import GallerySection from '../components/GallerySection';
+import EventsSection from '../components/EventsSection';
+import ContactSection from '../components/ContactSection';
 
 // Determine backend URL client-side to avoid SSR window reference
 let RENATE_BACKEND_URL = 'https://renate.photonenkollektiv.de';
@@ -162,66 +168,6 @@ export default function Home() {
     return () => obs.disconnect();
   }, []);
 
-  // // Scroll spine path that 'grows' and reveals sections as its drawn length reaches them
-  // useEffect(() => {
-  //   if (typeof window === 'undefined') return;
-  //   const spine = document.querySelector('#scroll-spine path') as SVGPathElement | null;
-  //   const sections = Array.from(document.querySelectorAll('section')) as HTMLElement[];
-  //   if (!spine) return;
-  //   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  //   let pathLength = 0;
-  //   const layout = () => {
-  //     // Build a gentle polyline path that connects midpoints between alternating aligned sections
-  //     const pts: { x: number; y: number }[] = [];
-  //     const leftX = 90; // px from left for left aligned
-  //     const rightX = 140; // slight shift when section aligns right
-  //     sections.forEach((sec) => {
-  //       const rect = sec.getBoundingClientRect();
-  //       const scrollY = window.scrollY;
-  //       const midY = rect.top + scrollY + rect.height * 0.1; // near top inside section
-  //       const alignRight = sec.classList.contains('align-right');
-  //       pts.push({ x: alignRight ? rightX : leftX, y: midY });
-  //     });
-  //     // Construct smooth path using quadratic curves
-  //     if (!pts.length) return;
-  //     let d = `M ${pts[0].x} ${pts[0].y}`;
-  //     for (let i = 1; i < pts.length; i++) {
-  //       const prev = pts[i - 1];
-  //       const curr = pts[i];
-  //       const cx = (prev.x + curr.x) / 2; // control point x for smoother horizontal easing
-  //       d += ` Q ${cx} ${prev.y} ${curr.x} ${curr.y}`;
-  //     }
-  //     spine.setAttribute('d', d);
-  //     pathLength = spine.getTotalLength();
-  //     spine.style.strokeDasharray = pathLength.toString();
-  //     // initial update of dashoffset
-  //     update();
-  //   };
-  //   const update = () => {
-  //     const scrollBottom = window.scrollY + window.innerHeight * 0.75; // progress point
-  //     // Determine how much of path to reveal: proportion of page scrolled relative to last section
-  //     const lastSec = sections[sections.length - 1];
-  //     const endY = lastSec ? lastSec.offsetTop + lastSec.offsetHeight : document.body.scrollHeight;
-  //     const progress = Math.min(1, scrollBottom / endY);
-  //     const drawLength = progress * pathLength;
-  //     spine.style.strokeDashoffset = (pathLength - drawLength).toString();
-  //     if (!prefersReduced) {
-  //       // Reveal sections whose path segment has been reached
-  //       sections.forEach(sec => {
-  //         const triggerY = sec.offsetTop + sec.offsetHeight * 0.1;
-  //           if (!sec.classList.contains('in-view') && drawLength >= triggerY) {
-  //             sec.classList.add('in-view');
-  //             sec.querySelectorAll('.will-animate, .stagger').forEach(el => el.classList.add('in-view'));
-  //           }
-  //       })
-  //     }
-  //   };
-  //   layout();
-  //   window.addEventListener('scroll', update, { passive: true });
-  //   window.addEventListener('resize', layout);
-  //   return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', layout); };
-  // }, []);
-
   return (
     <>
       <svg id="scroll-spine" aria-hidden="true">
@@ -236,152 +182,16 @@ export default function Home() {
       </svg>
       <Hero />
 
-  <section id="featured-gallery" className="will-animate fade-up align-left with-picto">
-        <span className="section-rail" aria-hidden="true" />
-        <div className="section-picto picto-gallery" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            {/* abstract lens/aperture + frame */}
-            <circle className="trace base closed" cx="60" cy="60" r="38" pathLength={300}></circle>
-            <g className="rotate-slow">
-              <path className="trace accent" d="M60 18 74 46 105 50 82 72 88 102 60 88 32 102 38 72 15 50 46 46Z" pathLength={320}></path>
-            </g>
-            <circle className="pulse glow" cx="60" cy="60" r="6" />
-          </svg>
-        </div>
-        <div className="gallery-grid stagger">
-          {featuredMedia.map((image) => (
-            <VideoOrImage setFocusedImage={handleGalleryImageClick} key={image.src} {...image} />
-          ))}
-        </div>
-      </section>
+      <FeaturedGallerySection items={featuredMedia} onSelect={handleGalleryImageClick} />
+      <AboutSection />
+      <ServicesSection />
 
-  <section id="about" className="will-animate slide-left align-right with-picto">
-        <span className="section-rail" aria-hidden="true" />
-        <div className="section-picto picto-about" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            {/* network / community nodes */}
-            <circle className="trace base closed" cx="60" cy="60" r="44" pathLength={300}></circle>
-            <circle className="trace accent closed" cx="60" cy="60" r="18" pathLength={200}></circle>
-            <g className="pulse">
-              <circle className="glow" cx="60" cy="16" r="5" />
-              <circle className="glow" cx="104" cy="60" r="5" />
-              <circle className="glow" cx="16" cy="60" r="5" />
-              <circle className="glow" cx="60" cy="104" r="5" />
-            </g>
-            <path className="trace base" d="M60 16 60 42M60 78 60 104M16 60H42M78 60H104" pathLength={220}></path>
-          </svg>
-        </div>
-        <div className="accent-bars" aria-hidden="true">
-          <div className="bar"><span className="scan" /></div>
-          <div className="bar"><span className="scan" /></div>
-          <div className="bar"><span className="scan" /></div>
-        </div>
-        <h2>Über uns</h2>
-        <div className="about-grid will-animate fade-up">
-          <div className="text">
-            <p>
-              Das Photonenkollektiv ist ein gemeinnütziger Verein aus Offenburg. Unser Herz schlägt für Licht‑ und Eventtechnik – wir unterstützen lokale Festivals, Partys und kulturelle Veranstaltungen mit professioneller Bühnentechnik, kreativen Lichtinstallationen und individuellen Sonderbauten. Unsere Leidenschaft gilt der Verbindung von Technik und Kunst, und wir möchten Erlebnisse schaffen, die lange in Erinnerung bleiben.
-            </p>
-          </div>
-          <div className="highlights stagger">
-            <div className="highlight-item">🤝 <span className="desc">Gemeinnützig & engagiert für unsere Region</span></div>
-            <div className="highlight-item">🎉 <span className="desc">Kreative Konzepte für Festivals & Clubs</span></div>
-            <div className="highlight-item">⚙️ <span className="desc">Individuelle Sonderbauten, nachhaltig gedacht</span></div>
-          </div>
-        </div>
-      </section>
-
-  <section id="services" className="will-animate slide-right align-left with-picto">
-        <span className="section-rail" aria-hidden="true" />
-        <div className="section-picto picto-services" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            {/* modular waveform / gear hybrid */}
-            <circle className="trace base closed" cx="60" cy="60" r="40" pathLength={300}></circle>
-            <g className="rotate-slow">
-              <path className="trace accent" d="M60 20 68 34 84 36 74 48 76 64 60 58 44 64 46 48 36 36 52 34Z" pathLength={260}></path>
-            </g>
-            <path className="trace glow" d="M20 82c10-8 18-8 28 0s18 8 28 0 18-8 28 0" pathLength={280}></path>
-          </svg>
-        </div>
-        <h2>Unsere Leistungen</h2>
-        <div className="services-grid mosaic stagger">
-          <div className="service-card big">
-            <span className="icon">🎛️</span>
-            <h3>Eventtechnik</h3>
-            <p>Ton, Licht, Video & Signalfluss – modular skalierbar für kleine Clubs bis Open Air.</p>
-          </div>
-          <div className="service-card">
-            <span className="icon">💡</span>
-            <h3>Light‑Design</h3>
-            <p>Story‑driven Lichtkonzepte, pixel‑mapping & atmosphärische Looks.</p>
-          </div>
-          <div className="service-card">
-            <span className="icon">📦</span>
-            <h3>Vermietung</h3>
-            <p>Professionelles Equipment – fair, gepflegt, einsatzbereit dokumentiert.</p>
-          </div>
-          <div className="service-card">
-            <span className="icon">🔧</span>
-            <h3>Sonderbauten</h3>
-            <p>Custom Rigs, Traversen‑Sonderlösungen & interaktive Installationen.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="gallery" className="gallery-all band" style={{ padding: 16 }}>
-        <div className="band-inner">
-          <div className="masonry-gallery stagger">
-            {mediaTotal.map((image) => (
-              <div className="masonry-item" key={image.src}>
-                <VideoOrImage setFocusedImage={handleGalleryImageClick} {...image} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <GallerySection items={mediaTotal} onSelect={handleGalleryImageClick} />
 
 
-      <section id="events" className="will-animate fade-up">
-        <span className="section-rail" aria-hidden="true" />
-        <h2>Nächste Events</h2>
-        <ul className="events-timeline">
-          {events.length === 0 && (
-            <li>
-              <span className="event-title">Aktuell keine öffentlichen Events</span>
-            </li>
-          )}
-          {events.map((e) => {
-            const start = new Date(e.startDate);
-            const end = new Date(e.endDate);
-            const fmt = (d: Date) => d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            return (
-              <li key={e.title + e.startDate} className="will-animate">
-                <span className="event-date">{fmt(start)}{fmt(end) !== fmt(start) ? ` – ${fmt(end)}` : ''}</span>
-                <span className="event-title">{e.title || 'Event'}</span>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+      <EventsSection events={events} />
 
-      <section id="contact" className="will-animate slide-left">
-        <span className="section-rail" aria-hidden="true" />
-        <h2>Kontakt</h2>
-        <div className="contact-form-wrapper will-animate fade-up">
-          <form onSubmit={handleContactFormSubmit} className="contact-form">
-            <label htmlFor="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Dein Name" required />
-
-            <label htmlFor="email">E‑Mail</label>
-            <input type="email" id="email" name="email" placeholder="deine@email.de" required />
-
-            <label htmlFor="message">Nachricht</label>
-            <textarea id="message" name="message" rows={5} placeholder="Wie können wir helfen?" required></textarea>
-
-            <button type="submit">Absenden</button>
-          </form>
-        </div>
-      </section>
+      <ContactSection onSubmit={handleContactFormSubmit} />
 
       <Modal
         isOpen={focusedImage !== undefined}
