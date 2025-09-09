@@ -124,7 +124,7 @@ export default function Home() {
           <div>
             <p>Impressum:</p>
             <p>Photonenkollektiv</p>
-            <p>Vaubanallee 2A</p>
+            <p>Vaubanallee 2</p>
             <p>79100 Freiburg im Breisgau</p>
           </div>
         </div>
