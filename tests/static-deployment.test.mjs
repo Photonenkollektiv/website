@@ -81,8 +81,21 @@ test("every legacy image and video remains at its public URL", () => {
 test("Vercel serves the public directory as a clean-url static site", () => {
   const config = JSON.parse(readFileSync(join(projectDir, "vercel.json"), "utf8"));
 
+  assert.equal(
+    config.framework,
+    null,
+    "The repository overrides the stale Next.js project preset with Other."
+  );
   assert.equal(config.outputDirectory, "public");
   assert.equal(config.cleanUrls, true);
+});
+
+test("Vercel builds the static site with a supported Node.js release", () => {
+  const packageJson = JSON.parse(
+    readFileSync(join(projectDir, "package.json"), "utf8")
+  );
+
+  assert.equal(packageJson.engines?.node, "24.x");
 });
 
 test("the framework application is removed and the test package has no dependencies", () => {

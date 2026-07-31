@@ -2,6 +2,9 @@
   "name": "photonenkollektiv-static",
   "version": "3.0.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "test": "node --test tests/*.test.mjs"
   }
