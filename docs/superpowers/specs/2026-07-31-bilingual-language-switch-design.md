@@ -146,7 +146,7 @@ Photonenkollektiv name remain unchanged where translation would be incorrect.
 | Was wir beitragen | What we contribute |
 | Technik teilen. Kultur möglich machen. | Share technology. Make culture possible. |
 | Veranstaltungen unterstützen | Support events |
-| Wir unterstützen selbstorganisierte Kulturveranstaltungen bei Licht, Klang, Aufbau und Betrieb — passend zu Raum, Idee und vorhandenen Mitteln. | We support self-organized cultural events with lighting, sound, setup, and operation — adapted to the space, idea, and available resources. |
+| Wir unterstützen selbstorganisierte Kulturveranstaltungen und solidarische Veranstaltungsformate bei Licht, Klang, Aufbau und Betrieb — passend zu Raum, Idee und vorhandenen Mitteln. | We support self-organized cultural events and solidarity-based event formats with lighting, sound, setup, and operation — adapted to the space, idea, and available resources. |
 | Technik gemeinsam bauen | Build technology together |
 | In unserer Technikwerkstatt entwickeln und reparieren wir LED-Lösungen und Elektrotechnik für temporäre Kulturräume. | In our technical workshop, we develop and repair LED systems and electrical equipment for temporary cultural spaces. |
 | Wissen offen weitergeben | Share knowledge openly |
