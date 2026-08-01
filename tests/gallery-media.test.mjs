@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -34,6 +35,17 @@ function filesBelow(directory) {
   });
 }
 
+function trackedPaths() {
+  return new Set(
+    execFileSync("git", ["ls-files", "-z", "public/images"], {
+      cwd: projectDir
+    })
+      .toString("utf8")
+      .split("\0")
+      .filter(Boolean)
+  );
+}
+
 test("gallery helpers sort newest named events first and Divers last per year", () => {
   const gallery = galleryHelpers();
   const fixtures = [
@@ -43,13 +55,13 @@ test("gallery helpers sort newest named events first and Divers last per year", 
     { year: 2026, eventDate: "2026-07-03", isMisc: false, event: "Feel Free 2026" },
     { year: 2023, eventDate: "2023-08-26", isMisc: false, event: "Keller DJ Set 2023" },
     { year: 2025, eventDate: "2025-11-15", isMisc: false, event: "R42 2025" },
-    { year: 2026, eventDate: "2026-07-11", isMisc: false, event: "Studi Sommerfest 2026" }
+    { year: 2026, eventDate: "2026-07-11", isMisc: false, event: "Vauyage to space 2026" }
   ];
 
   assert.deepEqual(
     Array.from(gallery.groupItems(fixtures), (group) => group.event),
     [
-      "Studi Sommerfest 2026",
+      "Vauyage to space 2026",
       "Feel Free 2026",
       "Realitätärätätä 2026",
       "R42 2025",
@@ -74,7 +86,7 @@ test("the real manifest resolves to the approved descending event order", () => 
   assert.deepEqual(
     Array.from(gallery.groupItems(galleryData().images), (group) => group.event),
     [
-      "Studi Sommerfest 2026",
+      "Vauyage to space 2026",
       "Feel Free 2026",
       "Realitätärätätä 2026",
       "R42 2025",
@@ -93,6 +105,39 @@ test("the real manifest resolves to the approved descending event order", () => 
       "Keller DJ Set 2023",
       "Divers 2023"
     ]
+  );
+});
+
+test("manifest media URLs use deployable NFC paths from the Git tree", () => {
+  const tracked = trackedPaths();
+
+  for (const item of galleryData().images) {
+    for (const mediaPath of [item.src, item.poster].filter(Boolean)) {
+      assert.equal(mediaPath, mediaPath.normalize("NFC"), `${mediaPath} uses NFC.`);
+      assert.ok(tracked.has(`public/${mediaPath}`), `${mediaPath} matches the Git tree.`);
+    }
+  }
+});
+
+test("the corrected 2026 event name replaces the obsolete public copy", () => {
+  const items = galleryData().images;
+  const renamed = items.filter((item) =>
+    item.src.startsWith("images/2026/Studi Sommerfest/")
+  );
+
+  assert.equal(renamed.length, 6);
+  assert.equal(
+    renamed.every((item) =>
+      item.event === "Vauyage to space 2026" &&
+      item.eventEn === "Vauyage to space 2026"
+    ),
+    true
+  );
+  assert.equal(
+    renamed.some((item) =>
+      `${item.event} ${item.eventEn} ${item.alt} ${item.altEn}`.includes("Studi Sommerfest")
+    ),
+    false
   );
 });
 
