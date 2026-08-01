@@ -24,7 +24,39 @@ test("German remains the literal SEO and no-JavaScript language", () => {
     html,
     /<meta name="description"[^>]*content="Photonenkollektiv – Freiburger Verein/
   );
+  assert.match(
+    html,
+    /<meta property="og:title" content="Photonenkollektiv — Kultur wird sichtbar" data-i18n-content="meta\.socialTitle">/
+  );
+  assert.match(
+    html,
+    /<meta property="og:description" content="Photonenkollektiv – Freiburger Verein[^>]*Kultur wird sichtbar\." data-i18n-content="meta\.description">/
+  );
+  assert.match(html, /<meta property="og:type" content="website">/);
+  assert.match(html, /<meta property="og:locale" content="de_DE">/);
+  assert.doesNotMatch(html, /dokumentarische Bilder|documentary images/i);
   assert.match(html, />Kultur wird <span>sichtbar\.<\/span><\/h1>/);
+});
+
+test("social preview copy is complete in German and English", () => {
+  const catalog = embeddedJson("i18n-data");
+
+  assert.equal(
+    catalog.de["meta.socialTitle"],
+    "Photonenkollektiv — Kultur wird sichtbar"
+  );
+  assert.equal(
+    catalog.en["meta.socialTitle"],
+    "Photonenkollektiv — Making culture visible"
+  );
+  assert.equal(
+    catalog.de["meta.description"],
+    "Photonenkollektiv – Freiburger Verein für die Hör- und Sichtbarkeit von Kulturveranstaltungen. Licht, Klang. Kultur wird sichtbar."
+  );
+  assert.equal(
+    catalog.en["meta.description"],
+    "Photonenkollektiv – Freiburg-based association supporting the visibility and audibility of cultural events. Light, sound. Making culture visible."
+  );
 });
 
 test("every marked translation key exists in German and English", () => {
