@@ -9,6 +9,7 @@
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <title data-i18n="meta.title">Photonenkollektiv — Licht, Klang, Kultur</title>
   <script src="language.js"></script>
+  <script src="gallery.js"></script>
   <script>
     (function () {
       if (!window.PhotonenLanguage) return;
@@ -588,6 +589,8 @@
       cursor: zoom-in;
     }
 
+    .gallery-item.is-video { cursor: pointer; }
+
     .gallery-item:nth-child(6n + 1) { grid-column: 1 / 8; }
     .gallery-item:nth-child(6n + 2) { grid-column: 8 / 13; margin-top: 8vw; }
     .gallery-item:nth-child(6n + 3) { grid-column: 2 / 6; }
@@ -640,6 +643,30 @@
     .gallery-item:focus-visible .image-wrap::after {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    .video-cue {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 1;
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: var(--fg);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .video-cue::before {
+      content: "▶";
+      font-size: 0.72rem;
     }
 
     .about {
@@ -854,11 +881,14 @@
       background: #020203;
     }
 
-    .lightbox-stage img {
+    .lightbox-stage img,
+    .lightbox-stage video {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
+
+    .lightbox-stage [hidden] { display: none; }
 
     .lightbox-close {
       position: absolute;
@@ -1260,7 +1290,7 @@
   <main id="inhalt">
     <section class="hero" id="start" data-od-id="hero">
       <div class="hero-media" aria-hidden="true">
-        <img class="is-active" src="assets/portfolio/2024-IMG_0822.webp" alt="">
+        <img class="is-active" src="images/2024/Blackwood Filmfestival/IMG_0822.webp" alt="">
         <img alt="">
       </div>
       <div class="photon-line" aria-hidden="true"></div>
@@ -1293,8 +1323,8 @@
           <p class="section-note" data-i18n="archive.note">Ein Blick auf Räume, Installationen und gemeinsame Arbeit — geordnet nach Veranstaltung.</p>
         </header>
 
-        <div class="tag-filters" id="tag-filters" aria-label="Bilder nach Tag filtern" data-i18n-aria-label="archive.filterLabel"></div>
-        <div class="event-groups" id="event-groups" aria-label="Bilder nach Veranstaltungen gruppiert" data-i18n-aria-label="archive.groupsLabel"></div>
+        <div class="tag-filters" id="tag-filters" aria-label="Medien nach Tag filtern" data-i18n-aria-label="archive.filterLabel"></div>
+        <div class="event-groups" id="event-groups" aria-label="Medien nach Veranstaltungen gruppiert" data-i18n-aria-label="archive.groupsLabel"></div>
       </div>
     </section>
 
@@ -1356,17 +1386,18 @@
     </section>
   </main>
 
-  <dialog class="lightbox" id="lightbox" aria-label="Bildansicht" data-i18n-aria-label="lightbox.viewer">
+  <dialog class="lightbox" id="lightbox" aria-label="Medienansicht" data-i18n-aria-label="lightbox.viewer">
     <div class="lightbox-inner">
       <div class="lightbox-stage">
         <img id="lightbox-image" src="assets/laser-halle.webp" alt="">
-        <button class="lightbox-close" type="button" aria-label="Bildansicht schließen" data-i18n-aria-label="lightbox.close">×</button>
+        <video id="lightbox-video" controls playsinline preload="metadata" hidden></video>
+        <button class="lightbox-close" type="button" aria-label="Medienansicht schließen" data-i18n-aria-label="lightbox.close">×</button>
       </div>
       <div class="lightbox-bar">
         <p class="lightbox-caption" id="lightbox-caption"></p>
         <div class="lightbox-nav">
-          <button type="button" data-lightbox-prev aria-label="Vorheriges Bild" data-i18n-aria-label="lightbox.previous">←</button>
-          <button type="button" data-lightbox-next aria-label="Nächstes Bild" data-i18n-aria-label="lightbox.next">→</button>
+          <button type="button" data-lightbox-prev aria-label="Vorheriges Medium" data-i18n-aria-label="lightbox.previous">←</button>
+          <button type="button" data-lightbox-next aria-label="Nächstes Medium" data-i18n-aria-label="lightbox.next">→</button>
         </div>
       </div>
     </div>
@@ -1394,8 +1425,8 @@
         "archive.eyebrow": "Aus dem Archiv",
         "archive.title": "Nächte, die bleiben.",
         "archive.note": "Ein Blick auf Räume, Installationen und gemeinsame Arbeit — geordnet nach Veranstaltung.",
-        "archive.filterLabel": "Bilder nach Tag filtern",
-        "archive.groupsLabel": "Bilder nach Veranstaltungen gruppiert",
+        "archive.filterLabel": "Medien nach Tag filtern",
+        "archive.groupsLabel": "Medien nach Veranstaltungen gruppiert",
         "about.eyebrow": "Was wir beitragen",
         "about.title": "Technik teilen. Kultur möglich machen.",
         "about.support.title": "Veranstaltungen unterstützen",
@@ -1412,16 +1443,18 @@
         "footer.direct": "Direkt",
         "footer.top": "Nach oben ↑",
         "footer.logoAlt": "Zeichen des Photonenkollektivs",
-        "lightbox.viewer": "Bildansicht",
-        "lightbox.close": "Bildansicht schließen",
-        "lightbox.previous": "Vorheriges Bild",
-        "lightbox.next": "Nächstes Bild",
+        "lightbox.viewer": "Medienansicht",
+        "lightbox.close": "Medienansicht schließen",
+        "lightbox.previous": "Vorheriges Medium",
+        "lightbox.next": "Nächstes Medium",
         "gallery.all": "Alle",
-        "gallery.imagesByEvent": "Bilder von {event}",
-        "gallery.openImage": "Bild öffnen: {event}",
+        "gallery.imagesByEvent": "Medien von {event}",
+        "gallery.openImage": "Medium öffnen: {event}",
+        "gallery.openVideo": "Video öffnen: {event}",
         "gallery.open": "Öffnen",
-        "gallery.countOne": "1 Bild",
-        "gallery.countMany": "{count} Bilder"
+        "gallery.play": "Abspielen",
+        "gallery.countOne": "1 Medium",
+        "gallery.countMany": "{count} Medien"
       },
       "en": {
         "meta.title": "Photonenkollektiv — Light, Sound, Culture",
@@ -1443,8 +1476,8 @@
         "archive.eyebrow": "From the archive",
         "archive.title": "Nights that stay with us.",
         "archive.note": "A look at spaces, installations, and collaborative work — grouped by event.",
-        "archive.filterLabel": "Filter images by tag",
-        "archive.groupsLabel": "Images grouped by event",
+        "archive.filterLabel": "Filter media by tag",
+        "archive.groupsLabel": "Media grouped by event",
         "about.eyebrow": "What we contribute",
         "about.title": "Share technology. Make culture possible.",
         "about.support.title": "Support events",
@@ -1461,16 +1494,18 @@
         "footer.direct": "Direct contact",
         "footer.top": "Back to top ↑",
         "footer.logoAlt": "Photonenkollektiv symbol",
-        "lightbox.viewer": "Image viewer",
-        "lightbox.close": "Close image viewer",
-        "lightbox.previous": "Previous image",
-        "lightbox.next": "Next image",
+        "lightbox.viewer": "Media viewer",
+        "lightbox.close": "Close media viewer",
+        "lightbox.previous": "Previous item",
+        "lightbox.next": "Next item",
         "gallery.all": "All",
-        "gallery.imagesByEvent": "Images from {event}",
-        "gallery.openImage": "Open image: {event}",
+        "gallery.imagesByEvent": "Media from {event}",
+        "gallery.openImage": "Open item: {event}",
+        "gallery.openVideo": "Open video: {event}",
         "gallery.open": "Open",
-        "gallery.countOne": "1 image",
-        "gallery.countMany": "{count} images"
+        "gallery.play": "Play",
+        "gallery.countOne": "1 item",
+        "gallery.countMany": "{count} items"
       }
     }
   </script>
@@ -1499,206 +1534,98 @@
         }
       },
       "images": [
-        {
-          "src": "assets/portfolio/2024-photonen-kirnhalden-24-87.webp",
-          "source": "/images/2024/photonen-kirnhalden-24-87.webp",
-          "event": "Kirnhalden 2024",
-          "eventEn": "Kirnhalden 2024",
-          "tags": ["Innenraum", "Laser", "Installation"],
-          "alt": "Grüne Laserstrahlen kreuzen einen Innenraum.",
-          "altEn": "Green laser beams cross an indoor venue.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/2024-photonen-kirnhalden-24-67.webp",
-          "source": "/images/2024/photonen-kirnhalden-24-67.webp",
-          "event": "Kirnhalden 2024",
-          "eventEn": "Kirnhalden 2024",
-          "tags": ["Technik", "Aufbau"],
-          "alt": "Mobiles Steuergerät auf einem Arbeitstisch.",
-          "altEn": "Mobile control unit on a workbench.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/2024-20240726_220354.webp",
-          "source": "/images/2024/20240726_220354.webp",
-          "event": "Holzrock 2024",
-          "eventEn": "Holzrock 2024",
-          "tags": ["Open Air", "Lichtkunst"],
-          "alt": "Violett beleuchtete Bühne beim Holzrock 2024.",
-          "altEn": "Stage lit in violet at Holzrock 2024.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/2024-20240822_135753.webp",
-          "source": "/images/2024/20240822_135753.webp",
-          "event": "GLED 2024",
-          "eventEn": "GLED 2024",
-          "tags": ["Installation", "Lichtkunst"],
-          "alt": "Roter Leuchtring mit Spiegelkugel unter einem Holzdach.",
-          "altEn": "Red light ring with a mirror ball beneath a wooden roof.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/2024-IMG_0822.webp",
-          "source": "/images/2024/IMG_0822.webp",
-          "event": "Veranstaltungen 2024",
-          "eventEn": "Events 2024",
-          "tags": ["Innenraum", "Laser"],
-          "alt": "Grüne Laserfächer über Publikum in einem Clubraum.",
-          "altEn": "Green laser fans above an audience in a club.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/2024-20240119_232427.webp",
-          "source": "/images/2024/20240119_232427.webp",
-          "event": "Veranstaltungen 2024",
-          "eventEn": "Events 2024",
-          "tags": ["Innenraum", "Installation"],
-          "alt": "Rot-blau beleuchtete Installation in einem Veranstaltungsraum.",
-          "altEn": "Red-and-blue-lit installation in an event space.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20240420_001734.webp",
-          "source": "/images/events/20240420_001734.webp",
-          "event": "Veranstaltungen 2024",
-          "eventEn": "Events 2024",
-          "tags": ["Innenraum", "Laser"],
-          "alt": "Türkise Laserlinien hinter einer Silhouette am Mischpult.",
-          "altEn": "Turquoise laser lines behind a silhouette at the mixing desk.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20240420_203008.webp",
-          "source": "/images/events/20240420_203008.webp",
-          "event": "Veranstaltungen 2024",
-          "eventEn": "Events 2024",
-          "tags": ["Innenraum", "Lichtkunst"],
-          "alt": "Gelbe Lichtprojektion in einem Gewölberaum.",
-          "altEn": "Yellow light projection in a vaulted room.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20240430_233848.webp",
-          "source": "/images/events/20240430_233848.webp",
-          "event": "Veranstaltungen 2024",
-          "eventEn": "Events 2024",
-          "tags": ["Innenraum", "Lichtkunst"],
-          "alt": "Weiße Lichtstrahlen vor einer Projektionsfläche.",
-          "altEn": "White beams of light in front of a projection screen.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20240503_210821.webp",
-          "source": "/images/events/20240503_210821.webp",
-          "event": "Veranstaltungen 2024",
-          "eventEn": "Events 2024",
-          "tags": ["Installation", "Open Air"],
-          "alt": "Rote Lichtobjekte und Traversen unter einer Zeltdecke.",
-          "altEn": "Red light objects and trusses beneath a marquee roof.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20230506_214900.webp",
-          "source": "/images/events/20230506_214900.webp",
-          "event": "Veranstaltungen 2023",
-          "eventEn": "Events 2023",
-          "tags": ["Innenraum", "Installation"],
-          "alt": "Geometrische Lichtobjekte über einer Tanzfläche.",
-          "altEn": "Geometric light objects above a dance floor.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20230513_235443.webp",
-          "source": "/images/events/20230513_235443.webp",
-          "event": "Veranstaltungen 2023",
-          "eventEn": "Events 2023",
-          "tags": ["Technik", "Aufbau"],
-          "alt": "Lichtsteuerung im roten Nebel.",
-          "altEn": "Lighting control setup in red fog.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20230518_004455.webp",
-          "source": "/images/events/20230518_004455.webp",
-          "event": "Veranstaltungen 2023",
-          "eventEn": "Events 2023",
-          "tags": ["Innenraum", "Lichtkunst"],
-          "alt": "Rote Leuchtkörper und Projektionen über einer Tanzfläche.",
-          "altEn": "Red luminous objects and projections above a dance floor.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20230804_021519.webp",
-          "source": "/images/events/20230804_021519.webp",
-          "event": "Veranstaltungen 2023",
-          "eventEn": "Events 2023",
-          "tags": ["Open Air", "Lichtkunst"],
-          "alt": "Farbige Beleuchtung zwischen Bäumen in einem Außenraum.",
-          "altEn": "Colorful lighting among trees in an outdoor space.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20230819_215627.webp",
-          "source": "/images/events/20230819_215627.webp",
-          "event": "Veranstaltungen 2023",
-          "eventEn": "Events 2023",
-          "tags": ["Open Air", "Lichtkunst"],
-          "alt": "Violett und rot beleuchteter Wald bei Nacht.",
-          "altEn": "Forest lit in violet and red at night.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-20230826_023800.webp",
-          "source": "/images/events/20230826_023800.webp",
-          "event": "Veranstaltungen 2023",
-          "eventEn": "Events 2023",
-          "tags": ["Innenraum", "Lichtkunst"],
-          "alt": "Grün beleuchteter Veranstaltungsraum.",
-          "altEn": "Event space lit in green.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-signal-2023-02-28-193950.webp",
-          "source": "/images/events/signal-2023-02-28-193950.webp",
-          "event": "Veranstaltungen 2023",
-          "eventEn": "Events 2023",
-          "tags": ["Innenraum", "Laser"],
-          "alt": "Grüne Laserstrahlen im Nebel eines Clubraums.",
-          "altEn": "Green laser beams in the haze of a club.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-IMG_0031.webp",
-          "source": "/images/events/IMG_0031.webp",
-          "event": "Weitere Veranstaltungen",
-          "eventEn": "More events",
-          "tags": ["Open Air", "Installation"],
-          "alt": "Blau beleuchtete Holzstruktur im Außenbereich.",
-          "altEn": "Wooden structure lit in blue outdoors.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-IMG_0221.webp",
-          "source": "/images/events/IMG_0221.webp",
-          "event": "Weitere Veranstaltungen",
-          "eventEn": "More events",
-          "tags": ["Innenraum", "Installation"],
-          "alt": "Violette Lichtstäbe in einem Veranstaltungsraum.",
-          "altEn": "Violet light bars in an event space.",
-          "visible": true
-        },
-        {
-          "src": "assets/portfolio/events-IMG_0864.webp",
-          "source": "/images/events/IMG_0864.webp",
-          "event": "Weitere Veranstaltungen",
-          "eventEn": "More events",
-          "tags": ["Open Air", "Laser"],
-          "alt": "Lichtstrahlen über einem nächtlichen Außengelände.",
-          "altEn": "Beams of light above an outdoor venue at night.",
-          "visible": true
-        }
+        {"type":"image","src":"images/2026/Studi Sommerfest/8CCC002F-E4DB-4464-ADC3-EF600FDDB350.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Studi Sommerfest 2026","eventEn":"Studi Sommerfest 2026","tags":["Open Air","Installation","Lichtkunst"],"alt":"Orange und rote Lichtstäbe rahmen eine Außenbühne mit leuchtender Kugel.","altEn":"Orange and red light bars frame an outdoor stage with a luminous sphere.","visible":true},
+        {"type":"image","src":"images/2026/Studi Sommerfest/IMG_4754.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Studi Sommerfest 2026","eventEn":"Studi Sommerfest 2026","tags":["Open Air","Installation","Lichtkunst"],"alt":"Blaue Lichtstäbe gliedern die Bühne des Studi Sommerfests bei Nacht.","altEn":"Blue light bars structure the Studi Sommerfest stage at night.","visible":true},
+        {"type":"image","src":"images/2026/Studi Sommerfest/IMG_4764.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Studi Sommerfest 2026","eventEn":"Studi Sommerfest 2026","tags":["Open Air","Technik","Aufbau"],"alt":"Die Außenbühne mit Traversen, Lautsprechern und Lichttechnik bei Tageslicht.","altEn":"The outdoor stage with trusses, speakers, and lighting equipment in daylight.","visible":true},
+        {"type":"image","src":"images/2026/Studi Sommerfest/IMG_4775.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Studi Sommerfest 2026","eventEn":"Studi Sommerfest 2026","tags":["Open Air","Laser","Lichtkunst"],"alt":"Blaue Laserfächer ziehen über das Publikum vor der Außenbühne.","altEn":"Blue laser fans sweep above the audience in front of the outdoor stage.","visible":true},
+        {"type":"image","src":"images/2026/Studi Sommerfest/IMG_4785.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Studi Sommerfest 2026","eventEn":"Studi Sommerfest 2026","tags":["Open Air","Laser","Lichtkunst"],"alt":"Violette und blaue Strahlen verbinden Bühne, Publikum und beleuchtete Bäume.","altEn":"Violet and blue beams connect the stage, audience, and illuminated trees.","visible":true},
+        {"type":"video","src":"images/2026/Studi Sommerfest/IMG_4795.mp4","poster":"images/2026/Studi Sommerfest/IMG_4795-poster.webp","duration":21.7,"year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Studi Sommerfest 2026","eventEn":"Studi Sommerfest 2026","tags":["Open Air","Laser","Lichtkunst"],"alt":"Video einer weit aufgefächerten blauen Lasershow über dem Publikum.","altEn":"Video of a wide blue laser show unfolding above the audience.","visible":true},
+
+        {"type":"image","src":"images/2026/Feel Free/IMG_4659.webp","year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Open Air","Lichtkunst"],"alt":"Violette Lichtflächen färben Bäume und Garten beim Feel Free.","altEn":"Violet washes of light color the trees and garden at Feel Free.","visible":true},
+        {"type":"image","src":"images/2026/Feel Free/IMG_4661.webp","year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Open Air","Lichtkunst"],"alt":"Violett und warmgelb beleuchtete Bäume hinter einem Holzgeländer.","altEn":"Trees lit in violet and warm yellow behind a wooden railing.","visible":true},
+        {"type":"image","src":"images/2026/Feel Free/IMG_4670.webp","year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Open Air","Technik","Aufbau"],"alt":"Traversen, Lautsprecher und LED-Stäbe der Feel-Free-Bühne im Tageslicht.","altEn":"Trusses, speakers, and LED bars on the Feel Free stage in daylight.","visible":true},
+        {"type":"image","src":"images/2026/Feel Free/IMG_4691.webp","year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Violette und blaue Laserstrahlen über einer Tanzfläche unter Holzdach.","altEn":"Violet and blue laser beams above a dance floor beneath a wooden roof.","visible":true},
+        {"type":"video","src":"images/2026/Feel Free/IMG_4718.mp4","poster":"images/2026/Feel Free/IMG_4718-poster.webp","duration":16.2,"year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Open Air","Lichtkunst"],"alt":"Video der grün und gelb beleuchteten Feel-Free-Bühne vor dem Publikum.","altEn":"Video of the Feel Free stage lit in green and yellow before the audience.","visible":true},
+
+        {"type":"image","src":"images/2026/Realita\u0308ta\u0308ra\u0308ta\u0308ta\u0308/0325f096-cf45-491d-92e1-7180641cf905.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Open Air","Lichtkunst"],"alt":"Ein historisches Gebäude und der Hof sind in der Dämmerung farbig beleuchtet.","altEn":"A historic building and courtyard are colorfully lit at dusk.","visible":true},
+        {"type":"image","src":"images/2026/Realita\u0308ta\u0308ra\u0308ta\u0308ta\u0308/6D8F4D1E-309F-45C5-9514-B1210E409D8B.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Installation","Technik","Lichtkunst"],"alt":"Ein rotes Photonen-Leuchtzeichen hängt neben der Lichtsteuerung im Fenster.","altEn":"A red Photonen light sign hangs beside the lighting controls in a window.","visible":true},
+        {"type":"image","src":"images/2026/Realita\u0308ta\u0308ra\u0308ta\u0308ta\u0308/IMG_4491.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Cyan- und magentafarbene Lichtformen schweben über Publikum und Steuerpult.","altEn":"Cyan and magenta light forms hover above the audience and control desk.","visible":true},
+        {"type":"image","src":"images/2026/Realita\u0308ta\u0308ra\u0308ta\u0308ta\u0308/IMG_4493.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Innenraum","Laser","Installation"],"alt":"Türkise und pinke Laserfächer schneiden durch eine vernetzte Deckeninstallation.","altEn":"Turquoise and pink laser fans cut through a netted ceiling installation.","visible":true},
+        {"type":"image","src":"images/2026/Realita\u0308ta\u0308ra\u0308ta\u0308ta\u0308/IMG_5310.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Innenraum","Technik","Aufbau"],"alt":"Traversen, Scheinwerfer, Monitore und Cases während des Aufbaus im Saal.","altEn":"Trusses, fixtures, monitors, and cases during setup in the hall.","visible":true},
+        {"type":"image","src":"images/2026/Realita\u0308ta\u0308ra\u0308ta\u0308ta\u0308/IMG_5312.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Weiße und violette Strahlen laufen im Nebel auf eine entfernte Projektion zu.","altEn":"White and violet beams converge through haze toward a distant projection.","visible":true},
+
+        {"type":"image","src":"images/2025/R42/IMG_1946.webp","year":2025,"eventDate":"2025-11-15","isMisc":false,"event":"R42 2025","eventEn":"R42 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Weiße diagonale Lichtstäbe und blaue Spots strukturieren die leere Tanzfläche.","altEn":"White diagonal light bars and blue spotlights structure the empty dance floor.","visible":true},
+        {"type":"video","src":"images/2025/R42/IMG_1952.mp4","poster":"images/2025/R42/IMG_1952-poster.webp","duration":22.8,"year":2025,"eventDate":"2025-11-15","isMisc":false,"event":"R42 2025","eventEn":"R42 2025","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Video von blauen und violetten Laserfächern im R42.","altEn":"Video of blue and violet laser fans inside R42.","visible":true},
+        {"type":"image","src":"images/2025/R42/IMG_1957.webp","year":2025,"eventDate":"2025-11-15","isMisc":false,"event":"R42 2025","eventEn":"R42 2025","tags":["Innenraum","Laser","Installation"],"alt":"Ein blauer Laserfächer trifft auf vertikale Lichtstäbe neben dem DJ-Pult.","altEn":"A blue laser fan meets vertical light bars beside the DJ booth.","visible":true},
+        {"type":"image","src":"images/2025/R42/IMG_3746.webp","year":2025,"eventDate":"2025-11-15","isMisc":false,"event":"R42 2025","eventEn":"R42 2025","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Warme Spots und farbige Dreiecke leuchten über dem Technikpult.","altEn":"Warm spotlights and colored triangles glow above the technical desk.","visible":true},
+
+        {"type":"image","src":"images/2025/Proseccival/IMG_1036.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Innenraum","Installation","Technik","Lichtkunst"],"alt":"Blaue vertikale Lichtstäbe umgeben DJ und Steuerbildschirm.","altEn":"Blue vertical light bars surround the DJ and control screen.","visible":true},
+        {"type":"image","src":"images/2025/Proseccival/IMG_1038.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Rotes und grünes Licht fällt durch reflektierende Bühnendekorationen.","altEn":"Red and green light passes through reflective stage decorations.","visible":true},
+        {"type":"image","src":"images/2025/Proseccival/IMG_1045.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Innenraum","Installation","Laser","Lichtkunst"],"alt":"Rote Lichtlinien strahlen sternförmig hinter einer Spiegelkugel hervor.","altEn":"Red light lines radiate like a star behind a mirror ball.","visible":true},
+        {"type":"image","src":"images/2025/Proseccival/IMG_1054.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Open Air","Installation","Lichtkunst"],"alt":"Eine geodätische Kuppel leuchtet nachts blau und rot zwischen Bäumen.","altEn":"A geodesic dome glows blue and red among trees at night.","visible":true},
+        {"type":"image","src":"images/2025/Proseccival/IMG_1059.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Leuchtstäbe und reflektierende Körper hängen über einer belebten Tanzfläche.","altEn":"Light bars and reflective forms hang above a busy dance floor.","visible":true},
+
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_0888.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Open Air","Technik","Aufbau"],"alt":"Dekoration, DJ-Tresen und Traversen stehen beim Aufbau im hellen Innenhof.","altEn":"Decorations, DJ counter, and trusses stand in the bright courtyard during setup.","visible":true},
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_2953.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Ein DJ steht im warmen Nebel hinter einem mit Lichterketten geschmückten Pult.","altEn":"A DJ stands in warm haze behind a booth decorated with string lights.","visible":true},
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_2975.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Innenraum","Lichtkunst"],"alt":"Silhouetten des Publikums stehen im grünen und violetten Licht.","altEn":"Audience silhouettes stand in green and violet light.","visible":true},
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_2976.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Violette und grüne Laserfächer ziehen knapp über die Tanzenden.","altEn":"Violet and green laser fans pass just above the dancers.","visible":true},
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_2980.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Innenraum","Laser","Installation"],"alt":"Ein dichtes grünes Lasernetz spannt sich unter der dekorierten Decke.","altEn":"A dense green laser mesh stretches beneath the decorated ceiling.","visible":true},
+
+        {"type":"image","src":"images/2025/Vaulymp/IMG_0132.webp","year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Lichtkunst"],"alt":"Ein blauer Lichtstrahl schneidet durch den Nebel zwischen Bäumen und Gebäuden.","altEn":"A blue beam cuts through haze between trees and buildings.","visible":true},
+        {"type":"image","src":"images/2025/Vaulymp/IMG_0142.webp","year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Installation","Lichtkunst"],"alt":"Blaue Lichtstäbe rahmen eine Bühne aus Holzpaletten bei Nacht.","altEn":"Blue light bars frame a wooden pallet stage at night.","visible":true},
+        {"type":"video","src":"images/2025/Vaulymp/IMG_0145.mp4","poster":"images/2025/Vaulymp/IMG_0145-poster.webp","duration":16.1,"year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Installation","Lichtkunst"],"alt":"Video der mit leuchtenden Wolken und Lichtstäben gestalteten Vaulymp-Bühne.","altEn":"Video of the Vaulymp stage designed with luminous clouds and light bars.","visible":true},
+        {"type":"video","src":"images/2025/Vaulymp/IMG_0174.mp4","poster":"images/2025/Vaulymp/IMG_0174-poster.webp","duration":33.3,"year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Lichtkunst"],"alt":"Video einer blau leuchtenden, vernebelten Außenbühne vor dichtem Publikum.","altEn":"Video of a blue, hazy outdoor stage before a dense audience.","visible":true},
+        {"type":"image","src":"images/2025/Vaulymp/IMG_2005.webp","year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Technik","Aufbau"],"alt":"Das Publikum versammelt sich tagsüber vor der hölzernen Vaulymp-Bühne.","altEn":"The audience gathers in daylight before the wooden Vaulymp stage.","visible":true},
+        {"type":"image","src":"images/2025/Vaulymp/IMG_2090.webp","year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Laser","Lichtkunst"],"alt":"Blaue Laserstrahlen brechen durch eine Nebelwolke über dem Publikum.","altEn":"Blue laser beams break through a cloud of haze above the audience.","visible":true},
+
+        {"type":"image","src":"images/2025/Schmecktgarten/DSC05813.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Laser","Lichtkunst"],"alt":"Das pinke Schmeckt-Leuchtzeichen steht zwischen violetten Strahlen und Tanzenden.","altEn":"The pink Schmeckt light sign sits among violet beams and dancers.","visible":true},
+        {"type":"video","src":"images/2025/Schmecktgarten/IMG_1604.mp4","poster":"images/2025/Schmecktgarten/IMG_1604-poster.webp","duration":11.6,"year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Lichtkunst"],"alt":"Video einer grün beleuchteten Festivalbühne vor dem Schmecktgarten-Publikum.","altEn":"Video of a festival stage lit in green before the Schmecktgarten audience.","visible":true},
+        {"type":"image","src":"images/2025/Schmecktgarten/IMG_1610.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Lichtkunst"],"alt":"Gelbes und rotes Bühnenlicht fällt nachts auf das versammelte Publikum.","altEn":"Yellow and red stage light falls across the gathered audience at night.","visible":true},
+        {"type":"image","src":"images/2025/Schmecktgarten/IMG_9319.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Installation","Aufbau"],"alt":"Die leere Schmecktgarten-Bühne ist während des Aufbaus violett beleuchtet.","altEn":"The empty Schmecktgarten stage is lit in violet during setup.","visible":true},
+        {"type":"image","src":"images/2025/Schmecktgarten/IMG_9372.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Lichtkunst"],"alt":"Magenta Licht und das Schmeckt-Zeichen leuchten über einer vollen Tanzfläche.","altEn":"Magenta light and the Schmeckt sign glow above a full dance floor.","visible":true},
+        {"type":"image","src":"images/2025/Schmecktgarten/IMG_9381.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Laser","Lichtkunst"],"alt":"Blaue und violette Strahlen kreuzen sich über dem Publikum vor der Bühne.","altEn":"Blue and violet beams cross above the audience before the stage.","visible":true},
+
+        {"type":"image","src":"images/2025/Su\u0308dhof/DSCF5509.webp","year":2025,"eventDate":"2025-05-10","isMisc":false,"event":"Südhof 2025","eventEn":"Südhof 2025","tags":["Innenraum","Lichtkunst"],"alt":"Türkises und rotes Licht zeichnet Muster auf die Zeltdecke über dem Publikum.","altEn":"Turquoise and red light draws patterns across the marquee roof above the audience.","visible":true},
+        {"type":"image","src":"images/2025/Su\u0308dhof/DSCF5593.webp","year":2025,"eventDate":"2025-05-10","isMisc":false,"event":"Südhof 2025","eventEn":"Südhof 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Blaue Spots und ein roter Lichtring schweben über der Südhof-Bühne.","altEn":"Blue spotlights and a red light ring hover above the Südhof stage.","visible":true},
+        {"type":"image","src":"images/2025/Su\u0308dhof/IMG_0654.webp","year":2025,"eventDate":"2025-05-10","isMisc":false,"event":"Südhof 2025","eventEn":"Südhof 2025","tags":["Innenraum","Lichtkunst"],"alt":"Gelbe und violette Strahlen leuchten durch den Nebel über dem Zeltpublikum.","altEn":"Yellow and violet beams shine through haze above the marquee audience.","visible":true},
+
+        {"type":"image","src":"images/2025/Divers/Beamer-Beam.webp","year":2025,"eventDate":"2025-12-31","isMisc":true,"event":"Divers 2025","eventEn":"Miscellaneous 2025","tags":["Technik","Lichtkunst"],"alt":"Ein Projektor fächert einen hellen Strahl in Regenbogenfarben auf.","altEn":"A projector spreads a bright beam into rainbow colors.","visible":true},
+        {"type":"image","src":"images/2025/Divers/Blackwood-Filmfestival.webp","year":2025,"eventDate":"2025-12-31","isMisc":true,"event":"Divers 2025","eventEn":"Miscellaneous 2025","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Grüne Laserlinien verlaufen über das Publikum unter einer Stoffdecke.","altEn":"Green laser lines pass above the audience beneath a fabric ceiling.","visible":true},
+        {"type":"image","src":"images/2025/Divers/Findus_Rufetto_1.webp","year":2025,"eventDate":"2025-12-31","isMisc":true,"event":"Divers 2025","eventEn":"Miscellaneous 2025","tags":["Innenraum","Installation","Laser","Lichtkunst"],"alt":"Ein schmaler dekorierter Raum wird von orangefarbenen und violetten Strahlen durchzogen.","altEn":"Orange and violet beams run through a narrow decorated room.","visible":true},
+        {"type":"image","src":"images/2025/Divers/Findus_Rufetto_2.webp","year":2025,"eventDate":"2025-12-31","isMisc":true,"event":"Divers 2025","eventEn":"Miscellaneous 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Blaue und violette Beleuchtung verwandelt einen leeren dekorierten Veranstaltungsraum.","altEn":"Blue and violet lighting transforms an empty decorated event space.","visible":true},
+
+        {"type":"image","src":"images/2024/Blackwood Filmfestival/IMG_0807.webp","year":2024,"eventDate":"2024-10-20","isMisc":false,"event":"Blackwood Filmfestival 2024","eventEn":"Blackwood Filmfestival 2024","tags":["Innenraum","Technik","Aufbau","Lichtkunst"],"alt":"Warme Lichtkegel fallen während der Einrichtung auf Bühne und leere Stuhlreihen.","altEn":"Warm beams fall across the stage and empty rows of chairs during setup.","visible":true},
+        {"type":"image","src":"images/2024/Blackwood Filmfestival/IMG_0815.webp","year":2024,"eventDate":"2024-10-20","isMisc":false,"event":"Blackwood Filmfestival 2024","eventEn":"Blackwood Filmfestival 2024","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Rote und blaue Laserfächer spannen sich über das Publikum.","altEn":"Red and blue laser fans stretch above the audience.","visible":true},
+        {"type":"image","src":"images/2024/Blackwood Filmfestival/IMG_0822.webp","year":2024,"eventDate":"2024-10-20","isMisc":false,"event":"Blackwood Filmfestival 2024","eventEn":"Blackwood Filmfestival 2024","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Grüne Laserfächer breiten sich über dem Publikum im Saal aus.","altEn":"Green laser fans spread above the audience in the hall.","visible":true},
+        {"type":"image","src":"images/2024/Blackwood Filmfestival/IMG_0842.webp","year":2024,"eventDate":"2024-10-20","isMisc":false,"event":"Blackwood Filmfestival 2024","eventEn":"Blackwood Filmfestival 2024","tags":["Innenraum","Lichtkunst"],"alt":"Magenta und blaues Bühnenlicht taucht das Publikum in Farbe.","altEn":"Magenta and blue stage light immerse the audience in color.","visible":true},
+
+        {"type":"image","src":"images/2024/Proseccival/20240822_135753.webp","year":2024,"eventDate":"2024-08-24","isMisc":false,"event":"Proseccival 2024","eventEn":"Proseccival 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Ein roter geometrischer Leuchtring umgibt eine Spiegelkugel unter dem Holzdach.","altEn":"A red geometric light ring surrounds a mirror ball beneath the wooden roof.","visible":true},
+        {"type":"image","src":"images/2024/Proseccival/IMG_0562.webp","year":2024,"eventDate":"2024-08-24","isMisc":false,"event":"Proseccival 2024","eventEn":"Proseccival 2024","tags":["Innenraum","Laser","Installation"],"alt":"Grüne Laserstrahlen laufen zwischen hängender Dekoration über eine Tanzfläche.","altEn":"Green laser beams pass between hanging decorations above a dance floor.","visible":true},
+
+        {"type":"image","src":"images/2024/Kirnhalden/20240616_013633.webp","year":2024,"eventDate":"2024-06-16","isMisc":false,"event":"Kirnhalden 2024","eventEn":"Kirnhalden 2024","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Cyan- und pinkfarbenes Bühnenlicht leuchtet über Publikum und Lichtsteuerung.","altEn":"Cyan and pink stage light shines above the audience and lighting controls.","visible":true},
+        {"type":"image","src":"images/2024/Kirnhalden/7F061008-7716-4248-9C51-C567BF2F24C7_1_102_o.webp","year":2024,"eventDate":"2024-06-16","isMisc":false,"event":"Kirnhalden 2024","eventEn":"Kirnhalden 2024","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Violette und blaue Laserfächer öffnen sich über einer leeren Tanzfläche.","altEn":"Violet and blue laser fans open above an empty dance floor.","visible":true},
+        {"type":"image","src":"images/2024/Kirnhalden/photonen-kirnhalden-24-67.webp","year":2024,"eventDate":"2024-06-16","isMisc":false,"event":"Kirnhalden 2024","eventEn":"Kirnhalden 2024","tags":["Technik","Aufbau"],"alt":"Ein mobiles Steuergerät liegt auf einem Holztisch vor der beleuchteten Bühne.","altEn":"A mobile control unit rests on a wooden table before the lit stage.","visible":true},
+        {"type":"image","src":"images/2024/Kirnhalden/photonen-kirnhalden-24-87.webp","year":2024,"eventDate":"2024-06-16","isMisc":false,"event":"Kirnhalden 2024","eventEn":"Kirnhalden 2024","tags":["Innenraum","Laser","Installation"],"alt":"Grüne Laserlinien kreuzen den gesamten Veranstaltungsraum.","altEn":"Green laser lines cross the entire event space.","visible":true},
+
+        {"type":"image","src":"images/2024/Su\u0308dhof/20240503_210821.webp","year":2024,"eventDate":"2024-05-04","isMisc":false,"event":"Südhof 2024","eventEn":"Südhof 2024","tags":["Innenraum","Installation","Aufbau"],"alt":"Rote fünfeckige Lichtobjekte und Traversen hängen während des Aufbaus im Zelt.","altEn":"Red pentagonal light objects and trusses hang in the marquee during setup.","visible":true},
+        {"type":"image","src":"images/2024/Su\u0308dhof/20240504_214915.webp","year":2024,"eventDate":"2024-05-04","isMisc":false,"event":"Südhof 2024","eventEn":"Südhof 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Blaue Lichtkegel treffen auf schwebende geometrische Körper unter der Zeltdecke.","altEn":"Blue beams meet suspended geometric forms beneath the marquee roof.","visible":true},
+
+        {"type":"image","src":"images/2024/Steinregen/20240420_001734.webp","year":2024,"eventDate":"2024-04-20","isMisc":false,"event":"Steinregen 2024","eventEn":"Steinregen 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Türkise diagonale Lichtlinien stehen hinter einer Silhouette am Pult.","altEn":"Turquoise diagonal light lines stand behind a silhouette at the desk.","visible":true},
+        {"type":"image","src":"images/2024/Steinregen/20240420_203008.webp","year":2024,"eventDate":"2024-04-20","isMisc":false,"event":"Steinregen 2024","eventEn":"Steinregen 2024","tags":["Innenraum","Lichtkunst"],"alt":"Eine gelbe sternförmige Projektion leuchtet durch den Gewölberaum.","altEn":"A yellow star-shaped projection shines through the vaulted room.","visible":true},
+
+        {"type":"image","src":"images/2024/Divers/20240119_232427.webp","year":2024,"eventDate":"2024-12-31","isMisc":true,"event":"Divers 2024","eventEn":"Miscellaneous 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Eine symmetrische rot-blaue Lichtinstallation rahmt ein DJ-Pult.","altEn":"A symmetrical red-and-blue light installation frames a DJ booth.","visible":true},
+        {"type":"image","src":"images/2024/Divers/5c7e046a-e1d6-4d65-9ea9-a3ccb813e874.webp","year":2024,"eventDate":"2024-12-31","isMisc":true,"event":"Divers 2024","eventEn":"Miscellaneous 2024","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Blaue Strahlen fächern sich aus einem dunklen, dekorierten Raum auf.","altEn":"Blue beams fan out across a dark, decorated room.","visible":true},
+        {"type":"image","src":"images/2024/Divers/IMG_0962.webp","year":2024,"eventDate":"2024-12-31","isMisc":true,"event":"Divers 2024","eventEn":"Miscellaneous 2024","tags":["Innenraum","Laser","Installation"],"alt":"Mehrfarbige Laserstrahlen durchziehen einen Raum mit hängenden Lichtobjekten.","altEn":"Multicolored laser beams cross a room with suspended light objects.","visible":true},
+        {"type":"image","src":"images/2024/Divers/LED_Decke.webp","year":2024,"eventDate":"2024-12-31","isMisc":true,"event":"Divers 2024","eventEn":"Miscellaneous 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Rote lineare Leuchten und sechseckige Elemente bilden eine grafische LED-Decke.","altEn":"Red linear lights and hexagonal elements form a graphic LED ceiling.","visible":true},
+
+        {"type":"image","src":"images/2023/Keller DJ Set/20230825_215803.webp","year":2023,"eventDate":"2023-08-26","isMisc":false,"event":"Keller DJ Set 2023","eventEn":"Keller DJ Set 2023","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Ein DJ spielt hinter einem Pult im pink und violett beleuchteten Keller.","altEn":"A DJ performs behind a booth in a basement lit pink and violet.","visible":true},
+        {"type":"image","src":"images/2023/Keller DJ Set/20230826_023800.webp","year":2023,"eventDate":"2023-08-26","isMisc":false,"event":"Keller DJ Set 2023","eventEn":"Keller DJ Set 2023","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Grünes Licht erfüllt den Keller mit DJ-Technik und sitzendem Publikum.","altEn":"Green light fills the basement with DJ equipment and a seated audience.","visible":true},
+
+        {"type":"image","src":"images/2023/Divers/20230506_214900.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Pinke Fünfecke und blaue Ringe schweben über einer Tanzfläche.","altEn":"Pink pentagons and blue rings float above a dance floor.","visible":true},
+        {"type":"image","src":"images/2023/Divers/20230518_004455.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Rote Lichtkörper ordnen sich strahlenförmig um eine Spiegelkugel.","altEn":"Red luminous forms radiate around a mirror ball.","visible":true},
+        {"type":"image","src":"images/2023/Divers/20230804_021519.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Open Air","Installation","Lichtkunst"],"alt":"Eine kleine Holzstruktur leuchtet blau zwischen farbig angestrahlten Bäumen.","altEn":"A small wooden structure glows blue among colorfully illuminated trees.","visible":true},
+        {"type":"image","src":"images/2023/Divers/20230819_215627.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Open Air","Lichtkunst"],"alt":"Rotes, violettes und grünes Licht verwandelt einen Wald bei Nacht.","altEn":"Red, violet, and green light transforms a forest at night.","visible":true},
+        {"type":"image","src":"images/2023/Divers/IMG_0864.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Open Air","Laser","Lichtkunst"],"alt":"Blaue Lichtstrahlen steigen über einem nebligen Außengelände in den Nachthimmel.","altEn":"Blue beams rise above a hazy outdoor venue into the night sky.","visible":true}
       ]
     }
   </script>
@@ -1731,7 +1658,7 @@
       const galleryData = JSON.parse(galleryDataElement.textContent);
       const heroSources = galleryData.images
         .filter(function (image) {
-          return image.visible;
+          return image.visible && image.type !== "video";
         })
         .map(function (image) {
           return image.src;
@@ -1819,12 +1746,14 @@
       const eventGroups = document.getElementById("event-groups");
       const lightbox = document.getElementById("lightbox");
       const lightboxImage = document.getElementById("lightbox-image");
+      const lightboxVideo = document.getElementById("lightbox-video");
       const lightboxCaption = document.getElementById("lightbox-caption");
+      const galleryHelpers = window.PhotonenGallery;
       const languageController = window.languageController;
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const visibleImages = galleryData.images.filter(function (image) {
+      const visibleImages = galleryHelpers.sortItems(galleryData.images.filter(function (image) {
         return image.visible;
-      });
+      }));
       let activeTag = "Alle";
       let activeImages = visibleImages;
       let activeImage = 0;
@@ -1912,14 +1841,6 @@
         });
       }
 
-      function groupImagesByEvent(images) {
-        return images.reduce(function (groups, image) {
-          if (!groups.has(image.event)) groups.set(image.event, []);
-          groups.get(image.event).push(image);
-          return groups;
-        }, new Map());
-      }
-
       function renderTagFilters() {
         const availableTags = new Set(visibleImages.flatMap(function (image) {
           return image.tags;
@@ -1949,10 +1870,11 @@
         activeImages = visibleImages.filter(function (image) {
           return activeTag === "Alle" || image.tags.includes(activeTag);
         });
-        const groupedImages = groupImagesByEvent(activeImages);
+        const groupedImages = galleryHelpers.groupItems(activeImages);
         eventGroups.replaceChildren();
 
-        groupedImages.forEach(function (images, eventName) {
+        groupedImages.forEach(function (eventGroup) {
+          const images = eventGroup.items;
           const group = document.createElement("section");
           const heading = document.createElement("header");
           const title = document.createElement("h3");
@@ -1976,23 +1898,36 @@
 
           images.forEach(function (image) {
             const globalIndex = activeImages.indexOf(image);
+            const video = galleryHelpers.isVideo(image);
             const button = document.createElement("button");
             const imageWrap = document.createElement("span");
             const element = document.createElement("img");
 
-            button.className = "gallery-item reveal";
+            button.className = "gallery-item reveal" + (video ? " is-video" : "");
             button.type = "button";
             button.dataset.index = String(globalIndex);
             button.setAttribute(
               "aria-label",
-              message("gallery.openImage", { event: displayEventName })
+              message(video ? "gallery.openVideo" : "gallery.openImage", {
+                event: displayEventName
+              })
             );
             imageWrap.className = "image-wrap";
-            imageWrap.dataset.openLabel = translate("gallery.open");
-            element.src = image.src;
+            imageWrap.dataset.openLabel = translate(video ? "gallery.play" : "gallery.open");
+            element.src = video ? image.poster : image.src;
             element.alt = localizedAlt(image);
             element.loading = "lazy";
+            element.decoding = "async";
             imageWrap.appendChild(element);
+
+            if (video) {
+              const cue = document.createElement("span");
+              cue.className = "video-cue";
+              cue.setAttribute("aria-hidden", "true");
+              cue.textContent = galleryHelpers.formatDuration(image.duration);
+              imageWrap.appendChild(cue);
+            }
+
             button.appendChild(imageWrap);
             button.addEventListener("click", function () {
               paintLightbox(globalIndex);
@@ -2009,11 +1944,35 @@
         watchReveals(eventGroups);
       }
 
+      function clearLightboxVideo() {
+        lightboxVideo.pause();
+        lightboxVideo.removeAttribute("src");
+        lightboxVideo.removeAttribute("poster");
+        lightboxVideo.removeAttribute("aria-label");
+        lightboxVideo.load();
+        lightboxVideo.hidden = true;
+        lightboxImage.hidden = false;
+      }
+
       function paintLightbox(index) {
         activeImage = (index + activeImages.length) % activeImages.length;
         const image = activeImages[activeImage];
-        lightboxImage.src = image.src;
-        lightboxImage.alt = localizedAlt(image);
+        const video = galleryHelpers.isVideo(image);
+
+        clearLightboxVideo();
+
+        if (video) {
+          lightboxImage.hidden = true;
+          lightboxVideo.hidden = false;
+          lightboxVideo.src = image.src;
+          lightboxVideo.poster = image.poster;
+          lightboxVideo.setAttribute("aria-label", localizedAlt(image));
+          lightboxVideo.load();
+        } else {
+          lightboxImage.src = image.src;
+          lightboxImage.alt = localizedAlt(image);
+        }
+
         lightboxCaption.textContent =
           String(activeImage + 1).padStart(2, "0") +
           " / " +
@@ -2039,6 +1998,8 @@
       lightbox.addEventListener("click", function (event) {
         if (event.target === lightbox) lightbox.close();
       });
+
+      lightbox.addEventListener("close", clearLightboxVideo);
 
       document.addEventListener("keydown", function (event) {
         if (!lightbox.open) return;

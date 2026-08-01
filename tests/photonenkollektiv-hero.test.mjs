@@ -56,6 +56,7 @@ test("der Hero zeigt zuerst das Startbild und spielt danach jedes übrige Galeri
       { src: "assets/one.webp", visible: true },
       { src: "assets/two.webp", visible: true },
       { src: "assets/three.webp", visible: true },
+      { src: "assets/clip.mp4", type: "video", visible: true },
       { src: "assets/hidden.webp", visible: false }
     ]
   };
@@ -113,7 +114,7 @@ test("der Hero zeigt zuerst das Startbild und spielt danach jedes übrige Galeri
   assert.deepEqual(
     new Set(firstRound),
     new Set(["assets/one.webp", "assets/two.webp", "assets/three.webp"]),
-    "Nach dem Startbild erscheint jedes übrige sichtbare Bild genau einmal."
+    "Nach dem Startbild erscheint jedes übrige sichtbare Bild, aber kein Video, genau einmal."
   );
 
   const lastSourceInFirstRound = firstRound.at(-1);

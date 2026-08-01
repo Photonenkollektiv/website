@@ -53,7 +53,7 @@ test("the header exposes an accessible persistent DE and EN control", () => {
 test("all gallery metadata has complete English presentation", () => {
   const gallery = embeddedJson("gallery-data");
 
-  assert.equal(gallery.images.length, 20);
+  assert.equal(gallery.images.length, 75);
   assert.equal(typeof gallery.tagLabels.en, "object");
 
   for (const tag of gallery.tagOrder) {
