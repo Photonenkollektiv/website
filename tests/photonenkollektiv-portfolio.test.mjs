@@ -124,5 +124,10 @@ assert.match(
   /<video\s+id="lightbox-video"[^>]*\bcontrols\b[^>]*\bplaysinline\b[^>]*>/,
   "Die Medienansicht besitzt eine steuerbare Inline-Videofläche."
 );
+assert.match(
+  html,
+  /\.lightbox-stage img,\s*\.lightbox-stage video\s*\{[^}]*position:\s*absolute;[^}]*inset:\s*0;[^}]*width:\s*100%;[^}]*height:\s*100%;[^}]*object-fit:\s*contain;/s,
+  "Bild und Video werden innerhalb der Lightbox-Bühne vollständig eingepasst."
+);
 
 console.log(`Galerievertrag erfüllt: ${data.images.length} Medien in ${events.size} Eventgruppen.`);
