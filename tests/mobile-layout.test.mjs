@@ -32,8 +32,8 @@ test("hero details align with the responsive content shell at every viewport", (
 
   assert.match(
     heroBottomCss,
-    /padding-inline:\s*calc\(\(100%\s*-\s*var\(--content\)\)\s*\/\s*2\)/,
-    "The hero details use the same left and right gutter as .shell."
+    /padding-inline:\s*var\(--hero-axis\)/,
+    "The hero details use the shared photon-line axis."
   );
 });
 
@@ -42,9 +42,22 @@ test("hero headline aligns with the photon line and supporting copy", () => {
 
   assert.match(
     heroCopyCss,
-    /padding-inline:\s*calc\(\(100%\s*-\s*var\(--content\)\)\s*\/\s*2\)/,
+    /padding-inline:\s*var\(--hero-axis\)/,
     "The hero headline uses the same left and right gutter as the details."
   );
+});
+
+test("the shared hero axis controls the photon line and both text blocks", () => {
+  const rootCss = cssBlockAfter(html, ":root");
+  const photonLineCss = cssBlockAfter(html, ".photon-line");
+  const mobileRootCss = cssBlockAfter(
+    cssBlockAfter(html, "@media (max-width: 700px)"),
+    ":root"
+  );
+
+  assert.match(rootCss, /--hero-axis:\s*clamp\(20px,\s*5\.5vw,\s*104px\)/);
+  assert.match(photonLineCss, /left:\s*var\(--hero-axis\)/);
+  assert.match(mobileRootCss, /--hero-axis:\s*16px/);
 });
 
 test("the Verein slogan stays within the content shell across mobile widths", () => {

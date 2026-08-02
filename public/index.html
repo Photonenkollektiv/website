@@ -56,6 +56,7 @@
       --font-display: "Avenir Next Condensed", "Helvetica Neue", sans-serif;
       --font-body: "Avenir Next", "Segoe UI", system-ui, sans-serif;
       --content: min(100% - 40px, 1480px);
+      --hero-axis: clamp(20px, 5.5vw, 104px);
       --pad-y: clamp(96px, 12vw, 184px);
       --rule: 1px solid color-mix(in oklch, var(--fg) 16%, transparent);
     }
@@ -341,7 +342,7 @@
     .photon-line {
       position: absolute;
       top: 0;
-      left: clamp(20px, 5.5vw, 104px);
+      left: var(--hero-axis);
       z-index: -1;
       width: 1px;
       height: 100%;
@@ -376,7 +377,7 @@
       grid-column: 1 / 11;
       grid-row: 1;
       max-width: 960px;
-      padding-inline: calc((100% - var(--content)) / 2);
+      padding-inline: var(--hero-axis);
     }
 
     .hero .eyebrow {
@@ -403,7 +404,7 @@
       grid-column: 1 / -1;
       margin-top: clamp(46px, 8vh, 92px);
       padding-top: 20px;
-      padding-inline: calc((100% - var(--content)) / 2);
+      padding-inline: var(--hero-axis);
       display: grid;
       grid-template-columns: 4fr 3fr 2fr;
       gap: 28px;
@@ -1049,13 +1050,11 @@
     @media (max-width: 700px) {
       :root {
         --content: min(100% - 32px, 640px);
+        --hero-axis: 16px;
         --pad-y: 96px;
       }
 
-      .photon-line,
-      .contact::before {
-        left: 16px;
-      }
+      .contact::before { left: 16px; }
 
       .hero-media img { object-position: 64% center; }
 
