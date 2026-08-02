@@ -60,6 +60,16 @@ test("the shared hero axis controls the photon line and both text blocks", () =>
   assert.match(mobileRootCss, /--hero-axis:\s*16px/);
 });
 
+test("the mobile hero fills the viewport when preview tooling narrows the body", () => {
+  const mobileCss = cssBlockAfter(html, "@media (max-width: 700px)");
+
+  assert.match(
+    mobileCss,
+    /\.hero\s*\{[^}]*width:\s*100vw;/s,
+    "The mobile hero remains edge-to-edge independently of its containing block."
+  );
+});
+
 test("the Verein slogan stays within the content shell across mobile widths", () => {
   const mobileCss = cssBlockAfter(html, "@media (max-width: 700px)");
   const statementMatch = mobileCss.match(
