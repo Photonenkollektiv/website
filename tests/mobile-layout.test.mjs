@@ -60,13 +60,24 @@ test("the shared hero axis controls the photon line and both text blocks", () =>
   assert.match(mobileRootCss, /--hero-axis:\s*16px/);
 });
 
-test("the mobile hero fills the viewport when preview tooling narrows the body", () => {
+test("the mobile hero fills the viewport independently of its containing block", () => {
   const mobileCss = cssBlockAfter(html, "@media (max-width: 700px)");
 
   assert.match(
     mobileCss,
     /\.hero\s*\{[^}]*width:\s*100vw;/s,
     "The mobile hero remains edge-to-edge independently of its containing block."
+  );
+});
+
+test("long mobile event headings wrap before their media count widens the page", () => {
+  const mobileCss = cssBlockAfter(html, "@media (max-width: 700px)");
+  const eventHeadCss = cssBlockAfter(mobileCss, ".event-group-head");
+
+  assert.match(
+    eventHeadCss,
+    /flex-wrap:\s*wrap/,
+    "Long event names and their metadata must wrap instead of creating horizontal overflow."
   );
 });
 
