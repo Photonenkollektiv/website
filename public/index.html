@@ -376,6 +376,7 @@
       grid-column: 1 / 11;
       grid-row: 1;
       max-width: 960px;
+      padding-inline: calc((100% - var(--content)) / 2);
     }
 
     .hero .eyebrow {
@@ -402,6 +403,7 @@
       grid-column: 1 / -1;
       margin-top: clamp(46px, 8vh, 92px);
       padding-top: 20px;
+      padding-inline: calc((100% - var(--content)) / 2);
       display: grid;
       grid-template-columns: 4fr 3fr 2fr;
       gap: 28px;
@@ -1079,7 +1081,6 @@
         grid-template-columns: 1fr;
         gap: 18px;
         margin-top: 48px;
-        padding-inline: calc((100% - var(--content)) / 2);
       }
 
       .hero-scroll { justify-self: start; }

@@ -27,14 +27,23 @@ function cssBlockAfter(source, marker) {
   assert.fail(`CSS block ${marker} is closed.`);
 }
 
-test("mobile hero details align with the responsive content shell", () => {
-  const mobileCss = cssBlockAfter(html, "@media (max-width: 700px)");
-  const heroBottomCss = cssBlockAfter(mobileCss, ".hero-bottom");
+test("hero details align with the responsive content shell at every viewport", () => {
+  const heroBottomCss = cssBlockAfter(html, ".hero-bottom");
 
   assert.match(
     heroBottomCss,
     /padding-inline:\s*calc\(\(100%\s*-\s*var\(--content\)\)\s*\/\s*2\)/,
-    "The mobile hero details use the same left and right gutter as .shell."
+    "The hero details use the same left and right gutter as .shell."
+  );
+});
+
+test("hero headline aligns with the photon line and supporting copy", () => {
+  const heroCopyCss = cssBlockAfter(html, ".hero-copy");
+
+  assert.match(
+    heroCopyCss,
+    /padding-inline:\s*calc\(\(100%\s*-\s*var\(--content\)\)\s*\/\s*2\)/,
+    "The hero headline uses the same left and right gutter as the details."
   );
 });
 
