@@ -1,0 +1,2035 @@
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060608">
+  <meta name="description" content="Photonenkollektiv – Freiburger Verein für die Hör- und Sichtbarkeit von Kulturveranstaltungen. Licht, Klang. Kultur wird sichtbar." data-i18n-content="meta.description">
+  <meta property="og:title" content="Photonenkollektiv — Kultur wird sichtbar" data-i18n-content="meta.socialTitle">
+  <meta property="og:description" content="Photonenkollektiv – Freiburger Verein für die Hör- und Sichtbarkeit von Kulturveranstaltungen. Licht, Klang. Kultur wird sichtbar." data-i18n-content="meta.description">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <title data-i18n="meta.title">Photonenkollektiv — Licht, Klang, Kultur</title>
+  <script src="language.js"></script>
+  <script src="gallery.js"></script>
+  <script>
+    (function () {
+      if (!window.PhotonenLanguage) return;
+
+      let storage = null;
+      try {
+        storage = window.localStorage;
+      } catch {
+        storage = null;
+      }
+
+      const systemLanguage =
+        (navigator.languages && navigator.languages[0]) ||
+        navigator.language;
+      const language = PhotonenLanguage.resolveLanguage(
+        PhotonenLanguage.readStoredLanguage(storage),
+        systemLanguage
+      );
+
+      document.documentElement.dataset.initialLanguage = language;
+      if (language === "en") {
+        document.documentElement.classList.add("language-pending");
+        window.setTimeout(function () {
+          document.documentElement.classList.remove("language-pending");
+        }, 1500);
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: oklch(12.3% 0.006 285.6);
+      --surface: oklch(17.5% 0.008 285.5);
+      --fg: oklch(96.7% 0.003 106.4);
+      --muted: oklch(69.2% 0.012 286.1);
+      --border: oklch(29.2% 0.014 285.5);
+      --accent: oklch(59.7% 0.241 2.4);
+      --success: oklch(73% 0.15 155);
+      --warn: oklch(82% 0.15 90);
+      --danger: oklch(62% 0.22 25);
+      --font-display: "Avenir Next Condensed", "Helvetica Neue", sans-serif;
+      --font-body: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      --content: min(100% - 40px, 1480px);
+      --hero-axis: clamp(20px, 5.5vw, 104px);
+      --pad-y: clamp(96px, 12vw, 184px);
+      --rule: 1px solid color-mix(in oklch, var(--fg) 16%, transparent);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    html.language-pending body { visibility: hidden; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.55;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.menu-open { overflow: hidden; }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--fg);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    a { color: inherit; }
+
+    button { font: inherit; }
+
+    a {
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.22em;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 5px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 200;
+      padding: 12px 16px;
+      background: var(--fg);
+      color: var(--bg);
+      transform: translateY(-160%);
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .shell {
+      width: var(--content);
+      margin-inline: auto;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 100;
+      border-bottom: 1px solid transparent;
+      transition: background-color 220ms ease, border-color 220ms ease;
+    }
+
+    .site-header.is-scrolled,
+    .site-header:has(.nav-toggle[aria-expanded="true"]) {
+      border-color: color-mix(in oklch, var(--fg) 12%, transparent);
+      background: color-mix(in oklch, var(--bg) 88%, transparent);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .nav-wrap {
+      min-height: 78px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 27px;
+      height: 38px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .brand span {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-stretch: condensed;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .site-nav { justify-self: center; }
+
+    .site-nav ul {
+      display: flex;
+      align-items: center;
+      gap: clamp(24px, 3vw, 48px);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .site-nav a {
+      position: relative;
+      color: color-mix(in oklch, var(--fg) 76%, transparent);
+      font-size: 0.76rem;
+      font-weight: 550;
+      letter-spacing: 0.07em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .site-nav a::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 -8px;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 180ms ease;
+    }
+
+    .site-nav a:hover::after,
+    .site-nav a:focus-visible::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .header-actions {
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .language-switch {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+    }
+
+    .language-switch button {
+      min-width: 36px;
+      min-height: 44px;
+      padding: 0 8px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .language-switch button[aria-pressed="true"] { color: var(--fg); }
+
+    .language-switch button:hover { color: var(--fg); }
+
+    .header-mail {
+      font-size: 0.76rem;
+      font-weight: 550;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+
+    .nav-toggle {
+      display: none;
+      justify-self: end;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--fg);
+      cursor: pointer;
+    }
+
+    .nav-toggle span,
+    .nav-toggle::before {
+      content: "";
+      display: block;
+      width: 24px;
+      height: 1px;
+      margin: 0 auto;
+      background: currentColor;
+      transition: transform 180ms ease;
+    }
+
+    .nav-toggle span { margin-top: 8px; }
+
+    .nav-toggle[aria-expanded="true"]::before {
+      transform: translateY(4.5px) rotate(45deg);
+    }
+
+    .nav-toggle[aria-expanded="true"] span {
+      transform: translateY(-4.5px) rotate(-45deg);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      align-items: end;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+    }
+
+    .hero-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 58% center;
+      filter: saturate(0.82) brightness(0.7);
+      opacity: 0;
+      transform: scale(1.02);
+      transition: opacity 1200ms cubic-bezier(.4, 0, .2, 1);
+      will-change: opacity;
+    }
+
+    .hero-media img.is-active {
+      opacity: 1;
+    }
+
+    .hero-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, color-mix(in oklch, var(--bg) 95%, transparent) 0%, color-mix(in oklch, var(--bg) 72%, transparent) 42%, color-mix(in oklch, var(--bg) 10%, transparent) 78%),
+        linear-gradient(0deg, var(--bg) 0%, transparent 32%);
+    }
+
+    .photon-line {
+      position: absolute;
+      top: 0;
+      left: var(--hero-axis);
+      z-index: -1;
+      width: 1px;
+      height: 100%;
+      overflow: visible;
+      background: color-mix(in oklch, var(--fg) 22%, transparent);
+    }
+
+    .photon-line::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -1px;
+      width: 3px;
+      height: 34vh;
+      background: var(--accent);
+      box-shadow: 0 0 18px color-mix(in oklch, var(--accent) 65%, transparent);
+      animation: scan 4.8s cubic-bezier(.65, 0, .35, 1) infinite;
+    }
+
+    .hero-grid {
+      width: 100%;
+      min-height: 100svh;
+      padding-top: 126px;
+      padding-bottom: clamp(40px, 6vw, 88px);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      align-content: end;
+      column-gap: clamp(16px, 2vw, 32px);
+    }
+
+    .hero-copy {
+      grid-column: 1 / 11;
+      grid-row: 1;
+      max-width: 960px;
+      padding-inline: var(--hero-axis);
+    }
+
+    .hero .eyebrow {
+      margin-bottom: clamp(24px, 4vh, 48px);
+      color: color-mix(in oklch, var(--fg) 72%, transparent);
+    }
+
+    .hero-title {
+      max-width: 9ch;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(4.4rem, 10.3vw, 10.6rem);
+      font-stretch: condensed;
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 0.82;
+      text-wrap: balance;
+      text-transform: uppercase;
+    }
+
+    .hero-title span { color: var(--accent); }
+
+    .hero-bottom {
+      grid-column: 1 / -1;
+      margin-top: clamp(46px, 8vh, 92px);
+      padding-top: 20px;
+      padding-inline: var(--hero-axis);
+      display: grid;
+      grid-template-columns: 4fr 3fr 2fr;
+      gap: 28px;
+      align-items: start;
+      border-top: var(--rule);
+    }
+
+    .hero-intro {
+      max-width: 54ch;
+      margin: 0;
+      font-size: clamp(1rem, 1.3vw, 1.2rem);
+      line-height: 1.55;
+      text-wrap: pretty;
+    }
+
+    .hero-place,
+    .hero-scroll {
+      color: color-mix(in oklch, var(--fg) 62%, transparent);
+      font-size: 0.75rem;
+      font-weight: 550;
+      letter-spacing: 0.08em;
+      line-height: 1.5;
+      text-transform: uppercase;
+    }
+
+    .hero-scroll {
+      justify-self: end;
+      text-decoration: none;
+    }
+
+    .statement {
+      padding-block: var(--pad-y);
+      border-bottom: var(--rule);
+    }
+
+    .statement-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: clamp(20px, 2vw, 32px);
+    }
+
+    .statement .eyebrow {
+      grid-column: 1 / 4;
+      padding-top: 12px;
+    }
+
+    .statement-copy {
+      grid-column: 4 / 13;
+      margin: 0;
+      max-width: 19ch;
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 5.8vw, 6.6rem);
+      font-stretch: condensed;
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      line-height: 0.98;
+      text-wrap: balance;
+    }
+
+    .statement-copy em {
+      color: var(--muted);
+      font-style: normal;
+    }
+
+    .archive {
+      position: relative;
+      padding-block: var(--pad-y);
+    }
+
+    .section-head {
+      margin-bottom: clamp(60px, 8vw, 112px);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: clamp(20px, 2vw, 32px);
+      align-items: end;
+    }
+
+    .section-head .eyebrow { grid-column: 1 / 4; }
+
+    .section-title {
+      grid-column: 4 / 10;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(3.4rem, 7vw, 7.4rem);
+      font-stretch: condensed;
+      font-weight: 550;
+      letter-spacing: -0.03em;
+      line-height: 0.88;
+      text-transform: uppercase;
+    }
+
+    .section-note {
+      grid-column: 10 / 13;
+      max-width: 28ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .tag-filters {
+      margin: 0 0 clamp(64px, 8vw, 112px);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag-filter {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid color-mix(in oklch, var(--fg) 22%, transparent);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+    }
+
+    .tag-filter:hover {
+      border-color: color-mix(in oklch, var(--fg) 54%, transparent);
+      color: var(--fg);
+    }
+
+    .tag-filter[aria-pressed="true"] {
+      border-color: var(--fg);
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .event-groups {
+      display: grid;
+      gap: clamp(112px, 14vw, 210px);
+    }
+
+    .event-group {
+      min-width: 0;
+    }
+
+    .event-group-head {
+      margin-bottom: clamp(34px, 5vw, 72px);
+      padding-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: clamp(16px, 2vw, 32px);
+      align-items: baseline;
+      border-top: var(--rule);
+    }
+
+    .event-title {
+      grid-column: 1 / 9;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.3rem, 5vw, 5.6rem);
+      font-stretch: condensed;
+      font-weight: 540;
+      letter-spacing: -0.025em;
+      line-height: 0.94;
+      text-transform: uppercase;
+    }
+
+    .event-meta {
+      grid-column: 10 / 13;
+      justify-self: end;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: clamp(28px, 5vw, 76px) clamp(16px, 2vw, 32px);
+      align-items: start;
+    }
+
+    .gallery-item {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--fg);
+      text-align: left;
+      cursor: zoom-in;
+    }
+
+    .gallery-item.is-video { cursor: pointer; }
+
+    .gallery-item:nth-child(6n + 1) { grid-column: 1 / 8; }
+    .gallery-item:nth-child(6n + 2) { grid-column: 8 / 13; margin-top: 8vw; }
+    .gallery-item:nth-child(6n + 3) { grid-column: 2 / 6; }
+    .gallery-item:nth-child(6n + 4) { grid-column: 6 / 13; margin-top: 5vw; }
+    .gallery-item:nth-child(6n + 5) { grid-column: 1 / 6; }
+    .gallery-item:nth-child(6n + 6) { grid-column: 6 / 13; margin-top: 6vw; }
+    .gallery-item:only-child { grid-column: 3 / 12; margin-top: 0; }
+
+    .image-wrap {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .image-wrap { aspect-ratio: 4 / 3; }
+
+    .image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 700ms cubic-bezier(.2, .7, .2, 1), filter 350ms ease;
+    }
+
+    .gallery-item:hover .image-wrap img,
+    .gallery-item:focus-visible .image-wrap img {
+      transform: scale(1.025);
+      filter: brightness(1.08);
+    }
+
+    .image-wrap::after {
+      content: attr(data-open-label);
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      padding: 8px 10px;
+      border: 1px solid color-mix(in oklch, var(--fg) 24%, transparent);
+      background: color-mix(in oklch, var(--bg) 78%, transparent);
+      color: var(--fg);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      opacity: 0;
+      text-transform: uppercase;
+      transform: translateY(5px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .gallery-item:hover .image-wrap::after,
+    .gallery-item:focus-visible .image-wrap::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .video-cue {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 1;
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: var(--fg);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .video-cue::before {
+      content: "▶";
+      font-size: 0.72rem;
+    }
+
+    .about {
+      padding-block: var(--pad-y);
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .about .eyebrow {
+      color: color-mix(in oklch, var(--bg) 62%, transparent);
+    }
+
+    .about-head {
+      display: grid;
+      grid-template-columns: 3fr 9fr;
+      gap: clamp(20px, 2vw, 32px);
+      padding-bottom: clamp(72px, 10vw, 132px);
+    }
+
+    .about-title {
+      max-width: 17ch;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 7vw, 7.6rem);
+      font-stretch: condensed;
+      font-weight: 520;
+      letter-spacing: -0.03em;
+      line-height: 1.04;
+      text-transform: uppercase;
+    }
+
+    .about-list {
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid color-mix(in oklch, var(--bg) 22%, transparent);
+      list-style: none;
+    }
+
+    .about-row {
+      display: grid;
+      grid-template-columns: 3fr 3fr 6fr;
+      gap: clamp(20px, 2vw, 32px);
+      padding-block: clamp(28px, 3.8vw, 54px);
+      border-bottom: 1px solid color-mix(in oklch, var(--bg) 22%, transparent);
+      align-items: baseline;
+    }
+
+    .about-row .index {
+      color: color-mix(in oklch, var(--bg) 58%, transparent);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+    }
+
+    .about-row h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.2vw, 3.5rem);
+      font-stretch: condensed;
+      font-weight: 560;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .about-row p {
+      max-width: 58ch;
+      margin: 0;
+      color: color-mix(in oklch, var(--bg) 75%, transparent);
+      font-size: clamp(1rem, 1.25vw, 1.18rem);
+      line-height: 1.6;
+      text-wrap: pretty;
+    }
+
+    .contact {
+      position: relative;
+      min-height: 88svh;
+      padding-block: var(--pad-y) 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .contact::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: clamp(20px, 5.5vw, 104px);
+      width: 1px;
+      height: 100%;
+      background: color-mix(in oklch, var(--fg) 18%, transparent);
+    }
+
+    .contact-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: clamp(20px, 2vw, 32px);
+    }
+
+    .contact .eyebrow { grid-column: 1 / 4; }
+    .contact-main { grid-column: 4 / 13; }
+
+    .contact-title {
+      max-width: 13ch;
+      margin: 0 0 clamp(36px, 5vw, 68px);
+      font-family: var(--font-display);
+      font-size: clamp(3.8rem, 8.6vw, 9rem);
+      font-stretch: condensed;
+      font-weight: 540;
+      letter-spacing: -0.035em;
+      line-height: 0.86;
+      text-transform: uppercase;
+    }
+
+    .contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .contact-link {
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border: 1px solid color-mix(in oklch, var(--fg) 30%, transparent);
+      border-radius: 0;
+      background: transparent;
+      color: var(--fg);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .contact-link { border-color: var(--accent); }
+
+    .contact-link:hover {
+      transform: translateY(-2px);
+      border-color: var(--fg);
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .footer {
+      position: relative;
+      margin-top: clamp(110px, 18vw, 240px);
+      padding-top: 24px;
+      display: grid;
+      grid-template-columns: 4fr 3fr 3fr 2fr;
+      gap: 24px;
+      align-items: start;
+      border-top: var(--rule);
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.6;
+    }
+
+    .footer strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--fg);
+      font-weight: 550;
+    }
+
+    .footer a { text-decoration: none; }
+    .footer a:hover { color: var(--fg); }
+
+    .footer-mark {
+      justify-self: end;
+      width: 34px;
+      height: 48px;
+      object-fit: contain;
+      opacity: 0.72;
+      filter: brightness(0) invert(1);
+    }
+
+    .lightbox {
+      width: min(94vw, 1480px);
+      max-width: none;
+      height: min(92svh, 960px);
+      max-height: none;
+      padding: 0;
+      border: 1px solid color-mix(in oklch, var(--fg) 18%, transparent);
+      background: var(--bg);
+      color: var(--fg);
+      overflow: hidden;
+    }
+
+    .lightbox::backdrop {
+      background: color-mix(in oklch, var(--bg) 86%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .lightbox-inner {
+      height: 100%;
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+
+    .lightbox-stage {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      background: #020203;
+    }
+
+    .lightbox-stage img,
+    .lightbox-stage video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .lightbox-stage [hidden] { display: none; }
+
+    .lightbox-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 48px;
+      height: 48px;
+      border: 1px solid color-mix(in oklch, var(--fg) 26%, transparent);
+      border-radius: 50%;
+      background: color-mix(in oklch, var(--bg) 80%, transparent);
+      color: var(--fg);
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .lightbox-bar {
+      min-height: 72px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: 14px 18px;
+      border-top: var(--rule);
+    }
+
+    .lightbox-caption {
+      margin: 0;
+      font-size: 0.78rem;
+      font-weight: 550;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .lightbox-nav {
+      display: flex;
+      gap: 8px;
+    }
+
+    .lightbox-nav button {
+      width: 48px;
+      height: 44px;
+      border: 1px solid color-mix(in oklch, var(--fg) 20%, transparent);
+      background: transparent;
+      color: var(--fg);
+      cursor: pointer;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 700ms ease, transform 700ms cubic-bezier(.2, .75, .25, 1);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-40vh); opacity: 0; }
+      15% { opacity: 1; }
+      75% { opacity: 1; }
+      100% { transform: translateY(108vh); opacity: 0; }
+    }
+
+    @media (max-width: 980px) {
+      :root { --content: min(100% - 32px, 880px); }
+
+      .nav-wrap { grid-template-columns: 1fr auto; }
+      .nav-toggle { display: block; }
+      .header-mail { display: none; }
+
+      .site-nav {
+        position: fixed;
+        inset: 78px 0 auto;
+        display: grid;
+        justify-self: stretch;
+        padding: 30px 16px 42px;
+        border-bottom: 1px solid color-mix(in oklch, var(--fg) 14%, transparent);
+        background: var(--bg);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-12px);
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+
+      .site-nav.is-open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .site-nav ul {
+        width: var(--content);
+        margin-inline: auto;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+      }
+
+      .site-nav li { border-bottom: var(--rule); }
+
+      .site-nav a {
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+      }
+
+      .hero-copy { grid-column: 1 / 11; }
+      .hero-bottom { grid-template-columns: 1fr 1fr; }
+
+      .hero-intro {
+        grid-column: 1 / -1;
+        margin-bottom: 18px;
+      }
+
+      .hero-scroll { justify-self: end; }
+
+      .statement .eyebrow,
+      .section-head .eyebrow,
+      .contact .eyebrow {
+        grid-column: 1 / 4;
+      }
+
+      .statement-copy,
+      .contact-main {
+        grid-column: 4 / 13;
+      }
+
+      .section-title { grid-column: 4 / 13; }
+
+      .section-note {
+        grid-column: 4 / 10;
+        margin-top: 24px;
+      }
+
+      .about-head { grid-template-columns: 1fr 3fr; }
+      .about-row { grid-template-columns: 1fr 3fr; }
+      .about-row .index { grid-column: 1; }
+      .about-row h3 { grid-column: 2; }
+      .about-row p { grid-column: 2; }
+
+      .footer { grid-template-columns: 1fr 1fr 1fr; }
+      .footer-mark { display: none; }
+    }
+
+    @media (max-width: 700px) {
+      :root {
+        --content: min(100% - 32px, 640px);
+        --hero-axis: 16px;
+        --pad-y: 96px;
+      }
+
+      .contact::before { left: 16px; }
+
+      .hero { width: 100vw; }
+
+      .hero-media img { object-position: 64% center; }
+
+      .hero-media::after {
+        background:
+          linear-gradient(90deg, color-mix(in oklch, var(--bg) 92%, transparent) 0%, color-mix(in oklch, var(--bg) 50%, transparent) 100%),
+          linear-gradient(0deg, var(--bg) 0%, transparent 55%);
+      }
+
+      .hero-grid {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-top: 112px;
+      }
+
+      .hero-title {
+        max-width: 8ch;
+        font-size: clamp(4rem, 20vw, 6.3rem);
+      }
+
+      .hero-bottom {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        margin-top: 48px;
+      }
+
+      .hero-scroll { justify-self: start; }
+
+      .statement-grid,
+      .section-head,
+      .contact-grid {
+        display: block;
+      }
+
+      .statement .eyebrow,
+      .section-head .eyebrow,
+      .contact .eyebrow {
+        margin-bottom: 34px;
+      }
+
+      .statement-copy {
+        font-size: clamp(2.65rem, 10.5vw, 4.4rem);
+      }
+
+      .section-title {
+        font-size: clamp(3.6rem, 16vw, 5.8rem);
+      }
+
+      .section-note { margin-top: 28px; }
+
+      .tag-filters { margin-bottom: 72px; }
+
+      .event-groups { gap: 118px; }
+
+      .event-group-head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 24px;
+        align-items: baseline;
+      }
+
+      .event-title {
+        font-size: clamp(2.5rem, 12vw, 4.4rem);
+      }
+
+      .event-meta {
+        flex: 0 0 auto;
+        justify-self: auto;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+        gap: 58px;
+      }
+
+      .gallery-item:nth-child(n) {
+        grid-column: 1;
+        margin-top: 0;
+      }
+
+      .gallery-item:nth-child(odd) { width: 94%; }
+
+      .gallery-item:nth-child(even) {
+        width: 90%;
+        justify-self: end;
+      }
+
+      .gallery-item:nth-child(n) .image-wrap {
+        aspect-ratio: 4 / 3;
+      }
+
+      .about-head { display: block; }
+
+      .about-head .eyebrow { margin-bottom: 34px; }
+
+      .about-title {
+        font-size: clamp(3.5rem, 15vw, 5.8rem);
+      }
+
+      .about-row {
+        grid-template-columns: 48px 1fr;
+        gap: 16px;
+      }
+
+      .about-row p {
+        grid-column: 1 / -1;
+        padding-left: 64px;
+      }
+
+      .contact { min-height: 100svh; }
+
+      .contact-title {
+        font-size: clamp(3.7rem, 17.5vw, 6.2rem);
+      }
+
+      .contact-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .contact-link { width: 100%; }
+
+      .footer {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px 20px;
+      }
+
+      .footer > div:first-child { grid-column: 1 / -1; }
+
+      .lightbox {
+        width: 100vw;
+        height: 100svh;
+        border: 0;
+      }
+    }
+
+    @media (max-width: 390px) {
+      :root { --content: calc(100% - 24px); }
+
+      .nav-wrap { min-height: 70px; }
+      .brand span { font-size: 0.88rem; }
+      .header-actions { gap: 4px; }
+
+      .brand img {
+        width: 24px;
+        height: 34px;
+      }
+
+      .site-nav { top: 70px; }
+
+      .statement-copy {
+        font-size: clamp(2.1rem, 10.5vw, 3rem);
+      }
+
+      .hero-title {
+        font-size: clamp(3.55rem, 18vw, 4.7rem);
+      }
+
+      .event-group-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .gallery-item:nth-child(n) { width: 100%; }
+      .about-row { display: block; }
+
+      .about-row .index {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .about-row p {
+        margin-top: 16px;
+        padding-left: 0;
+      }
+
+      .footer { grid-template-columns: 1fr; }
+      .footer > div:first-child { grid-column: auto; }
+    }
+
+    @media (max-width: 350px) {
+      .brand span { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#inhalt" data-i18n="skip.content">Zum Inhalt</a>
+
+  <header class="site-header" id="site-header">
+    <div class="nav-wrap shell">
+      <a class="brand" href="#start" aria-label="Photonenkollektiv – zum Anfang" data-i18n-aria-label="brand.home">
+        <img src="logo.svg" alt="">
+        <span>Photonenkollektiv</span>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Hauptnavigation" data-i18n-aria-label="nav.label">
+        <ul>
+          <li><a href="#archiv" data-i18n="nav.archive">Nachtarchiv</a></li>
+          <li><a href="#verein" data-i18n="nav.association">Der Verein</a></li>
+          <li><a href="#kontakt" data-i18n="nav.contact">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <div class="language-switch" role="group" aria-label="Sprache wählen" data-i18n-aria-label="language.label">
+          <button type="button" data-language="de" aria-pressed="true">DE</button>
+          <span aria-hidden="true">/</span>
+          <button type="button" data-language="en" aria-pressed="false">EN</button>
+        </div>
+
+        <a class="header-mail" href="mailto:info@photonenkollektiv.de">info@photonenkollektiv.de</a>
+
+        <button class="nav-toggle" type="button" aria-label="Menü öffnen" data-i18n-aria-label="menu.open" aria-controls="site-nav" aria-expanded="false">
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="inhalt">
+    <section class="hero" id="start" data-od-id="hero">
+      <div class="hero-media" aria-hidden="true">
+        <img class="is-active" src="images/2024/Blackwood Filmfestival/IMG_0822.webp" alt="">
+        <img alt="">
+      </div>
+      <div class="photon-line" aria-hidden="true"></div>
+
+      <div class="hero-grid shell">
+        <div class="hero-copy">
+          <h1 class="hero-title" data-i18n-html="hero.title">Kultur wird <span>sichtbar.</span></h1>
+        </div>
+
+        <div class="hero-bottom">
+          <p class="hero-intro" data-i18n="hero.intro">Wir schaffen Licht- und Klangräume für lokale, selbstorganisierte Kulturveranstaltungen.</p>
+          <span class="hero-place" data-i18n-html="hero.place">Freiburg im Breisgau<br>Vor Ort &amp; mobil</span>
+          <a class="hero-scroll" href="#archiv" data-i18n="hero.archive">Zum Nachtarchiv ↓</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement" data-od-id="statement">
+      <div class="statement-grid shell reveal">
+        <p class="eyebrow">Photonenkollektiv</p>
+        <p class="statement-copy" data-i18n-html="statement.copy">Ein Verein zur Förderung der <em>Hör- und Sichtbarkeit</em> von Kulturveranstaltungen.</p>
+      </div>
+    </section>
+
+    <section class="archive" id="archiv" data-od-id="nachtarchiv">
+      <div class="shell">
+        <header class="section-head reveal">
+          <p class="eyebrow" data-i18n="archive.eyebrow">Aus dem Archiv</p>
+          <h2 class="section-title" data-i18n="archive.title">Nächte, die bleiben.</h2>
+          <p class="section-note" data-i18n="archive.note">Ein Blick auf Räume, Installationen und gemeinsame Arbeit — geordnet nach Veranstaltung.</p>
+        </header>
+
+        <div class="tag-filters" id="tag-filters" aria-label="Medien nach Tag filtern" data-i18n-aria-label="archive.filterLabel"></div>
+        <div class="event-groups" id="event-groups" aria-label="Medien nach Veranstaltungen gruppiert" data-i18n-aria-label="archive.groupsLabel"></div>
+      </div>
+    </section>
+
+    <section class="about" id="verein" data-od-id="verein">
+      <div class="shell">
+        <div class="about-head reveal">
+          <p class="eyebrow" data-i18n="about.eyebrow">Was wir beitragen</p>
+          <h2 class="about-title" data-i18n="about.title">Technik teilen. Kultur möglich machen.</h2>
+        </div>
+
+        <ol class="about-list">
+          <li class="about-row reveal">
+            <span class="index">01</span>
+            <h3 data-i18n="about.support.title">Veranstaltungen unterstützen</h3>
+            <p data-i18n="about.support.copy">Wir unterstützen selbstorganisierte Kulturveranstaltungen und solidarische Veranstaltungsformate bei Licht, Klang, Aufbau und Betrieb — passend zu Raum, Idee und vorhandenen Mitteln.</p>
+          </li>
+          <li class="about-row reveal">
+            <span class="index">02</span>
+            <h3 data-i18n="about.build.title">Technik gemeinsam bauen</h3>
+            <p data-i18n="about.build.copy">In unserer Technikwerkstatt entwickeln und reparieren wir LED-Lösungen und Elektrotechnik für temporäre Kulturräume.</p>
+          </li>
+          <li class="about-row reveal">
+            <span class="index">03</span>
+            <h3 data-i18n="about.share.title">Wissen offen weitergeben</h3>
+            <p data-i18n="about.share.copy">In How-tos und gemeinsamen Werkstattterminen zeigen wir, wie die Technik funktioniert — zum Verstehen, Nachbauen und Weiterentwickeln.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="contact" id="kontakt" data-od-id="kontakt">
+      <div class="contact-grid shell reveal">
+        <p class="eyebrow" data-i18n="nav.contact">Kontakt</p>
+        <div class="contact-main">
+          <h2 class="contact-title" data-i18n="contact.title">Du brauchst Support bei deinem Event oder hast eine Idee?</h2>
+          <div class="contact-actions">
+            <a class="contact-link" href="mailto:info@photonenkollektiv.de?subject=Anfrage%20an%20das%20Photonenkollektiv" data-i18n="contact.email" data-i18n-href="contact.emailHref">E-Mail schreiben ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer shell">
+        <div>
+          <strong>Photonenkollektiv</strong>
+          <span data-i18n="footer.description">Verein zur Förderung der Hör- und Sichtbarkeit von Kulturveranstaltungen</span>
+        </div>
+        <div>
+          <strong data-i18n="footer.address">Adresse</strong>
+          Vaubanallee 2<br>
+          79100 Freiburg im Breisgau
+        </div>
+        <div>
+          <strong data-i18n="footer.direct">Direkt</strong>
+          <a href="mailto:info@photonenkollektiv.de">info@photonenkollektiv.de</a><br>
+          <a href="#start" data-i18n="footer.top">Nach oben ↑</a>
+        </div>
+        <img class="footer-mark" src="logo.svg" alt="Zeichen des Photonenkollektivs" data-i18n-alt="footer.logoAlt">
+      </footer>
+    </section>
+  </main>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Medienansicht" data-i18n-aria-label="lightbox.viewer">
+    <div class="lightbox-inner">
+      <div class="lightbox-stage">
+        <img id="lightbox-image" src="assets/laser-halle.webp" alt="">
+        <video id="lightbox-video" controls playsinline preload="metadata" hidden></video>
+        <button class="lightbox-close" type="button" aria-label="Medienansicht schließen" data-i18n-aria-label="lightbox.close">×</button>
+      </div>
+      <div class="lightbox-bar">
+        <p class="lightbox-caption" id="lightbox-caption"></p>
+        <div class="lightbox-nav">
+          <button type="button" data-lightbox-prev aria-label="Vorheriges Medium" data-i18n-aria-label="lightbox.previous">←</button>
+          <button type="button" data-lightbox-next aria-label="Nächstes Medium" data-i18n-aria-label="lightbox.next">→</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script id="i18n-data" type="application/json">
+    {
+      "de": {
+        "meta.title": "Photonenkollektiv — Licht, Klang, Kultur",
+        "meta.socialTitle": "Photonenkollektiv — Kultur wird sichtbar",
+        "meta.description": "Photonenkollektiv – Freiburger Verein für die Hör- und Sichtbarkeit von Kulturveranstaltungen. Licht, Klang. Kultur wird sichtbar.",
+        "skip.content": "Zum Inhalt",
+        "brand.home": "Photonenkollektiv – zum Anfang",
+        "nav.label": "Hauptnavigation",
+        "nav.archive": "Nachtarchiv",
+        "nav.association": "Der Verein",
+        "nav.contact": "Kontakt",
+        "language.label": "Sprache wählen",
+        "menu.open": "Menü öffnen",
+        "menu.close": "Menü schließen",
+        "hero.title": "Kultur wird <span>sichtbar.</span>",
+        "hero.intro": "Wir schaffen Licht- und Klangräume für lokale, selbstorganisierte Kulturveranstaltungen.",
+        "hero.place": "Freiburg im Breisgau<br>Vor Ort &amp; mobil",
+        "hero.archive": "Zum Nachtarchiv ↓",
+        "statement.copy": "Ein Verein zur Förderung der <em>Hör- und Sichtbarkeit</em> von Kulturveranstaltungen.",
+        "archive.eyebrow": "Aus dem Archiv",
+        "archive.title": "Nächte, die bleiben.",
+        "archive.note": "Ein Blick auf Räume, Installationen und gemeinsame Arbeit — geordnet nach Veranstaltung.",
+        "archive.filterLabel": "Medien nach Tag filtern",
+        "archive.groupsLabel": "Medien nach Veranstaltungen gruppiert",
+        "about.eyebrow": "Was wir beitragen",
+        "about.title": "Technik teilen. Kultur möglich machen.",
+        "about.support.title": "Veranstaltungen unterstützen",
+        "about.support.copy": "Wir unterstützen selbstorganisierte Kulturveranstaltungen und solidarische Veranstaltungsformate bei Licht, Klang, Aufbau und Betrieb — passend zu Raum, Idee und vorhandenen Mitteln.",
+        "about.build.title": "Technik gemeinsam bauen",
+        "about.build.copy": "In unserer Technikwerkstatt entwickeln und reparieren wir LED-Lösungen und Elektrotechnik für temporäre Kulturräume.",
+        "about.share.title": "Wissen offen weitergeben",
+        "about.share.copy": "In How-tos und gemeinsamen Werkstattterminen zeigen wir, wie die Technik funktioniert — zum Verstehen, Nachbauen und Weiterentwickeln.",
+        "contact.title": "Du brauchst Support bei deinem Event oder hast eine Idee?",
+        "contact.email": "E-Mail schreiben ↗",
+        "contact.emailHref": "mailto:info@photonenkollektiv.de?subject=Anfrage%20an%20das%20Photonenkollektiv",
+        "footer.description": "Verein zur Förderung der Hör- und Sichtbarkeit von Kulturveranstaltungen",
+        "footer.address": "Adresse",
+        "footer.direct": "Direkt",
+        "footer.top": "Nach oben ↑",
+        "footer.logoAlt": "Zeichen des Photonenkollektivs",
+        "lightbox.viewer": "Medienansicht",
+        "lightbox.close": "Medienansicht schließen",
+        "lightbox.previous": "Vorheriges Medium",
+        "lightbox.next": "Nächstes Medium",
+        "gallery.all": "Alle",
+        "gallery.imagesByEvent": "Medien von {event}",
+        "gallery.openImage": "Medium öffnen: {event}",
+        "gallery.openVideo": "Video öffnen: {event}",
+        "gallery.open": "Öffnen",
+        "gallery.play": "Abspielen",
+        "gallery.countOne": "1 Medium",
+        "gallery.countMany": "{count} Medien"
+      },
+      "en": {
+        "meta.title": "Photonenkollektiv — Light, Sound, Culture",
+        "meta.socialTitle": "Photonenkollektiv — Making culture visible",
+        "meta.description": "Photonenkollektiv – Freiburg-based association supporting the visibility and audibility of cultural events. Light, sound. Making culture visible.",
+        "skip.content": "Skip to content",
+        "brand.home": "Photonenkollektiv – back to top",
+        "nav.label": "Main navigation",
+        "nav.archive": "Night archive",
+        "nav.association": "The association",
+        "nav.contact": "Contact",
+        "language.label": "Choose language",
+        "menu.open": "Open menu",
+        "menu.close": "Close menu",
+        "hero.title": "Culture becomes <span>visible.</span>",
+        "hero.intro": "We create lighting and sound environments for local, self-organized cultural events.",
+        "hero.place": "Freiburg im Breisgau<br>On site &amp; mobile",
+        "hero.archive": "Explore the night archive ↓",
+        "statement.copy": "An association supporting the <em>audibility and visibility</em> of cultural events.",
+        "archive.eyebrow": "From the archive",
+        "archive.title": "Nights that stay with us.",
+        "archive.note": "A look at spaces, installations, and collaborative work — grouped by event.",
+        "archive.filterLabel": "Filter media by tag",
+        "archive.groupsLabel": "Media grouped by event",
+        "about.eyebrow": "What we contribute",
+        "about.title": "Share technology. Make culture possible.",
+        "about.support.title": "Support events",
+        "about.support.copy": "We support self-organized cultural events and solidarity-based event formats with lighting, sound, setup, and operation — adapted to the space, idea, and available resources.",
+        "about.build.title": "Build technology together",
+        "about.build.copy": "In our technical workshop, we develop and repair LED systems and electrical equipment for temporary cultural spaces.",
+        "about.share.title": "Share knowledge openly",
+        "about.share.copy": "Through how-tos and collaborative workshop sessions, we show how the technology works — so it can be understood, recreated, and developed further.",
+        "contact.title": "Need support for your event or have an idea?",
+        "contact.email": "Write an email ↗",
+        "contact.emailHref": "mailto:info@photonenkollektiv.de?subject=Enquiry%20to%20Photonenkollektiv",
+        "footer.description": "Association supporting the audibility and visibility of cultural events",
+        "footer.address": "Address",
+        "footer.direct": "Direct contact",
+        "footer.top": "Back to top ↑",
+        "footer.logoAlt": "Photonenkollektiv symbol",
+        "lightbox.viewer": "Media viewer",
+        "lightbox.close": "Close media viewer",
+        "lightbox.previous": "Previous item",
+        "lightbox.next": "Next item",
+        "gallery.all": "All",
+        "gallery.imagesByEvent": "Media from {event}",
+        "gallery.openImage": "Open item: {event}",
+        "gallery.openVideo": "Open video: {event}",
+        "gallery.open": "Open",
+        "gallery.play": "Play",
+        "gallery.countOne": "1 item",
+        "gallery.countMany": "{count} items"
+      }
+    }
+  </script>
+
+  <script id="gallery-data" type="application/json">
+    {
+      "tagOrder": ["Innenraum", "Open Air", "Installation", "Laser", "Technik", "Lichtkunst", "Aufbau"],
+      "tagLabels": {
+        "de": {
+          "Innenraum": "Innenraum",
+          "Open Air": "Open Air",
+          "Installation": "Installation",
+          "Laser": "Laser",
+          "Technik": "Technik",
+          "Lichtkunst": "Lichtkunst",
+          "Aufbau": "Aufbau"
+        },
+        "en": {
+          "Innenraum": "Indoor",
+          "Open Air": "Open air",
+          "Installation": "Installation",
+          "Laser": "Laser",
+          "Technik": "Technology",
+          "Lichtkunst": "Light art",
+          "Aufbau": "Setup"
+        }
+      },
+      "images": [
+        {"type":"image","src":"images/2026/Studi Sommerfest/8CCC002F-E4DB-4464-ADC3-EF600FDDB350.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Vauyage to space 2026","eventEn":"Vauyage to space 2026","tags":["Open Air","Installation","Lichtkunst"],"alt":"Orange und rote Lichtstäbe rahmen eine Außenbühne mit leuchtender Kugel.","altEn":"Orange and red light bars frame an outdoor stage with a luminous sphere.","visible":true},
+        {"type":"image","src":"images/2026/Studi Sommerfest/IMG_4754.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Vauyage to space 2026","eventEn":"Vauyage to space 2026","tags":["Open Air","Installation","Lichtkunst"],"alt":"Blaue Lichtstäbe gliedern die Vauyage-to-space-Bühne bei Nacht.","altEn":"Blue light bars structure the Vauyage to space stage at night.","visible":true},
+        {"type":"image","src":"images/2026/Studi Sommerfest/IMG_4764.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Vauyage to space 2026","eventEn":"Vauyage to space 2026","tags":["Open Air","Technik","Aufbau"],"alt":"Die Außenbühne mit Traversen, Lautsprechern und Lichttechnik bei Tageslicht.","altEn":"The outdoor stage with trusses, speakers, and lighting equipment in daylight.","visible":true},
+        {"type":"image","src":"images/2026/Studi Sommerfest/IMG_4775.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Vauyage to space 2026","eventEn":"Vauyage to space 2026","tags":["Open Air","Laser","Lichtkunst"],"alt":"Blaue Laserfächer ziehen über das Publikum vor der Außenbühne.","altEn":"Blue laser fans sweep above the audience in front of the outdoor stage.","visible":true},
+        {"type":"image","src":"images/2026/Studi Sommerfest/IMG_4785.webp","year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Vauyage to space 2026","eventEn":"Vauyage to space 2026","tags":["Open Air","Laser","Lichtkunst"],"alt":"Violette und blaue Strahlen verbinden Bühne, Publikum und beleuchtete Bäume.","altEn":"Violet and blue beams connect the stage, audience, and illuminated trees.","visible":true},
+        {"type":"video","src":"images/2026/Studi Sommerfest/IMG_4795.mp4","poster":"images/2026/Studi Sommerfest/IMG_4795-poster.webp","duration":21.7,"year":2026,"eventDate":"2026-07-11","isMisc":false,"event":"Vauyage to space 2026","eventEn":"Vauyage to space 2026","tags":["Open Air","Laser","Lichtkunst"],"alt":"Video einer weit aufgefächerten blauen Lasershow über dem Publikum.","altEn":"Video of a wide blue laser show unfolding above the audience.","visible":true},
+
+        {"type":"image","src":"images/2026/Feel Free/IMG_4659.webp","year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Open Air","Lichtkunst"],"alt":"Violette Lichtflächen färben Bäume und Garten beim Feel Free.","altEn":"Violet washes of light color the trees and garden at Feel Free.","visible":true},
+        {"type":"image","src":"images/2026/Feel Free/IMG_4661.webp","year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Open Air","Lichtkunst"],"alt":"Violett und warmgelb beleuchtete Bäume hinter einem Holzgeländer.","altEn":"Trees lit in violet and warm yellow behind a wooden railing.","visible":true},
+        {"type":"image","src":"images/2026/Feel Free/IMG_4670.webp","year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Open Air","Technik","Aufbau"],"alt":"Traversen, Lautsprecher und LED-Stäbe der Feel-Free-Bühne im Tageslicht.","altEn":"Trusses, speakers, and LED bars on the Feel Free stage in daylight.","visible":true},
+        {"type":"image","src":"images/2026/Feel Free/IMG_4691.webp","year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Violette und blaue Laserstrahlen über einer Tanzfläche unter Holzdach.","altEn":"Violet and blue laser beams above a dance floor beneath a wooden roof.","visible":true},
+        {"type":"video","src":"images/2026/Feel Free/IMG_4718.mp4","poster":"images/2026/Feel Free/IMG_4718-poster.webp","duration":16.2,"year":2026,"eventDate":"2026-07-03","isMisc":false,"event":"Feel Free 2026","eventEn":"Feel Free 2026","tags":["Open Air","Lichtkunst"],"alt":"Video der grün und gelb beleuchteten Feel-Free-Bühne vor dem Publikum.","altEn":"Video of the Feel Free stage lit in green and yellow before the audience.","visible":true},
+
+        {"type":"image","src":"images/2026/Realit\u00e4t\u00e4r\u00e4t\u00e4t\u00e4/0325f096-cf45-491d-92e1-7180641cf905.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Open Air","Lichtkunst"],"alt":"Ein historisches Gebäude und der Hof sind in der Dämmerung farbig beleuchtet.","altEn":"A historic building and courtyard are colorfully lit at dusk.","visible":true},
+        {"type":"image","src":"images/2026/Realit\u00e4t\u00e4r\u00e4t\u00e4t\u00e4/6D8F4D1E-309F-45C5-9514-B1210E409D8B.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Installation","Technik","Lichtkunst"],"alt":"Ein rotes Photonen-Leuchtzeichen hängt neben der Lichtsteuerung im Fenster.","altEn":"A red Photonen light sign hangs beside the lighting controls in a window.","visible":true},
+        {"type":"image","src":"images/2026/Realit\u00e4t\u00e4r\u00e4t\u00e4t\u00e4/IMG_4491.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Cyan- und magentafarbene Lichtformen schweben über Publikum und Steuerpult.","altEn":"Cyan and magenta light forms hover above the audience and control desk.","visible":true},
+        {"type":"image","src":"images/2026/Realit\u00e4t\u00e4r\u00e4t\u00e4t\u00e4/IMG_4493.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Innenraum","Laser","Installation"],"alt":"Türkise und pinke Laserfächer schneiden durch eine vernetzte Deckeninstallation.","altEn":"Turquoise and pink laser fans cut through a netted ceiling installation.","visible":true},
+        {"type":"image","src":"images/2026/Realit\u00e4t\u00e4r\u00e4t\u00e4t\u00e4/IMG_5310.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Innenraum","Technik","Aufbau"],"alt":"Traversen, Scheinwerfer, Monitore und Cases während des Aufbaus im Saal.","altEn":"Trusses, fixtures, monitors, and cases during setup in the hall.","visible":true},
+        {"type":"image","src":"images/2026/Realit\u00e4t\u00e4r\u00e4t\u00e4t\u00e4/IMG_5312.webp","year":2026,"eventDate":"2026-06-13","isMisc":false,"event":"Realitätärätätä 2026","eventEn":"Realitätärätätä 2026","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Weiße und violette Strahlen laufen im Nebel auf eine entfernte Projektion zu.","altEn":"White and violet beams converge through haze toward a distant projection.","visible":true},
+
+        {"type":"image","src":"images/2025/R42/IMG_1946.webp","year":2025,"eventDate":"2025-11-15","isMisc":false,"event":"R42 2025","eventEn":"R42 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Weiße diagonale Lichtstäbe und blaue Spots strukturieren die leere Tanzfläche.","altEn":"White diagonal light bars and blue spotlights structure the empty dance floor.","visible":true},
+        {"type":"video","src":"images/2025/R42/IMG_1952.mp4","poster":"images/2025/R42/IMG_1952-poster.webp","duration":22.8,"year":2025,"eventDate":"2025-11-15","isMisc":false,"event":"R42 2025","eventEn":"R42 2025","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Video von blauen und violetten Laserfächern im R42.","altEn":"Video of blue and violet laser fans inside R42.","visible":true},
+        {"type":"image","src":"images/2025/R42/IMG_1957.webp","year":2025,"eventDate":"2025-11-15","isMisc":false,"event":"R42 2025","eventEn":"R42 2025","tags":["Innenraum","Laser","Installation"],"alt":"Ein blauer Laserfächer trifft auf vertikale Lichtstäbe neben dem DJ-Pult.","altEn":"A blue laser fan meets vertical light bars beside the DJ booth.","visible":true},
+        {"type":"image","src":"images/2025/R42/IMG_3746.webp","year":2025,"eventDate":"2025-11-15","isMisc":false,"event":"R42 2025","eventEn":"R42 2025","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Warme Spots und farbige Dreiecke leuchten über dem Technikpult.","altEn":"Warm spotlights and colored triangles glow above the technical desk.","visible":true},
+
+        {"type":"image","src":"images/2025/Proseccival/IMG_1036.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Innenraum","Installation","Technik","Lichtkunst"],"alt":"Blaue vertikale Lichtstäbe umgeben DJ und Steuerbildschirm.","altEn":"Blue vertical light bars surround the DJ and control screen.","visible":true},
+        {"type":"image","src":"images/2025/Proseccival/IMG_1038.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Rotes und grünes Licht fällt durch reflektierende Bühnendekorationen.","altEn":"Red and green light passes through reflective stage decorations.","visible":true},
+        {"type":"image","src":"images/2025/Proseccival/IMG_1045.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Innenraum","Installation","Laser","Lichtkunst"],"alt":"Rote Lichtlinien strahlen sternförmig hinter einer Spiegelkugel hervor.","altEn":"Red light lines radiate like a star behind a mirror ball.","visible":true},
+        {"type":"image","src":"images/2025/Proseccival/IMG_1054.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Open Air","Installation","Lichtkunst"],"alt":"Eine geodätische Kuppel leuchtet nachts blau und rot zwischen Bäumen.","altEn":"A geodesic dome glows blue and red among trees at night.","visible":true},
+        {"type":"image","src":"images/2025/Proseccival/IMG_1059.webp","year":2025,"eventDate":"2025-08-16","isMisc":false,"event":"Proseccival 2025","eventEn":"Proseccival 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Leuchtstäbe und reflektierende Körper hängen über einer belebten Tanzfläche.","altEn":"Light bars and reflective forms hang above a busy dance floor.","visible":true},
+
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_0888.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Open Air","Technik","Aufbau"],"alt":"Dekoration, DJ-Tresen und Traversen stehen beim Aufbau im hellen Innenhof.","altEn":"Decorations, DJ counter, and trusses stand in the bright courtyard during setup.","visible":true},
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_2953.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Ein DJ steht im warmen Nebel hinter einem mit Lichterketten geschmückten Pult.","altEn":"A DJ stands in warm haze behind a booth decorated with string lights.","visible":true},
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_2975.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Innenraum","Lichtkunst"],"alt":"Silhouetten des Publikums stehen im grünen und violetten Licht.","altEn":"Audience silhouettes stand in green and violet light.","visible":true},
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_2976.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Violette und grüne Laserfächer ziehen knapp über die Tanzenden.","altEn":"Violet and green laser fans pass just above the dancers.","visible":true},
+        {"type":"image","src":"images/2025/Findus Anglerheim/IMG_2980.webp","year":2025,"eventDate":"2025-08-03","isMisc":false,"event":"Findus Anglerheim 2025","eventEn":"Findus Anglerheim 2025","tags":["Innenraum","Laser","Installation"],"alt":"Ein dichtes grünes Lasernetz spannt sich unter der dekorierten Decke.","altEn":"A dense green laser mesh stretches beneath the decorated ceiling.","visible":true},
+
+        {"type":"image","src":"images/2025/Vaulymp/IMG_0132.webp","year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Lichtkunst"],"alt":"Ein blauer Lichtstrahl schneidet durch den Nebel zwischen Bäumen und Gebäuden.","altEn":"A blue beam cuts through haze between trees and buildings.","visible":true},
+        {"type":"image","src":"images/2025/Vaulymp/IMG_0142.webp","year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Installation","Lichtkunst"],"alt":"Blaue Lichtstäbe rahmen eine Bühne aus Holzpaletten bei Nacht.","altEn":"Blue light bars frame a wooden pallet stage at night.","visible":true},
+        {"type":"video","src":"images/2025/Vaulymp/IMG_0145.mp4","poster":"images/2025/Vaulymp/IMG_0145-poster.webp","duration":16.1,"year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Installation","Lichtkunst"],"alt":"Video der mit leuchtenden Wolken und Lichtstäben gestalteten Vaulymp-Bühne.","altEn":"Video of the Vaulymp stage designed with luminous clouds and light bars.","visible":true},
+        {"type":"video","src":"images/2025/Vaulymp/IMG_0174.mp4","poster":"images/2025/Vaulymp/IMG_0174-poster.webp","duration":33.3,"year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Lichtkunst"],"alt":"Video einer blau leuchtenden, vernebelten Außenbühne vor dichtem Publikum.","altEn":"Video of a blue, hazy outdoor stage before a dense audience.","visible":true},
+        {"type":"image","src":"images/2025/Vaulymp/IMG_2005.webp","year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Technik","Aufbau"],"alt":"Das Publikum versammelt sich tagsüber vor der hölzernen Vaulymp-Bühne.","altEn":"The audience gathers in daylight before the wooden Vaulymp stage.","visible":true},
+        {"type":"image","src":"images/2025/Vaulymp/IMG_2090.webp","year":2025,"eventDate":"2025-07-05","isMisc":false,"event":"Vaulymp 2025","eventEn":"Vaulymp 2025","tags":["Open Air","Laser","Lichtkunst"],"alt":"Blaue Laserstrahlen brechen durch eine Nebelwolke über dem Publikum.","altEn":"Blue laser beams break through a cloud of haze above the audience.","visible":true},
+
+        {"type":"image","src":"images/2025/Schmecktgarten/DSC05813.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Laser","Lichtkunst"],"alt":"Das pinke Schmeckt-Leuchtzeichen steht zwischen violetten Strahlen und Tanzenden.","altEn":"The pink Schmeckt light sign sits among violet beams and dancers.","visible":true},
+        {"type":"video","src":"images/2025/Schmecktgarten/IMG_1604.mp4","poster":"images/2025/Schmecktgarten/IMG_1604-poster.webp","duration":11.6,"year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Lichtkunst"],"alt":"Video einer grün beleuchteten Festivalbühne vor dem Schmecktgarten-Publikum.","altEn":"Video of a festival stage lit in green before the Schmecktgarten audience.","visible":true},
+        {"type":"image","src":"images/2025/Schmecktgarten/IMG_1610.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Lichtkunst"],"alt":"Gelbes und rotes Bühnenlicht fällt nachts auf das versammelte Publikum.","altEn":"Yellow and red stage light falls across the gathered audience at night.","visible":true},
+        {"type":"image","src":"images/2025/Schmecktgarten/IMG_9319.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Installation","Aufbau"],"alt":"Die leere Schmecktgarten-Bühne ist während des Aufbaus violett beleuchtet.","altEn":"The empty Schmecktgarten stage is lit in violet during setup.","visible":true},
+        {"type":"image","src":"images/2025/Schmecktgarten/IMG_9372.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Lichtkunst"],"alt":"Magenta Licht und das Schmeckt-Zeichen leuchten über einer vollen Tanzfläche.","altEn":"Magenta light and the Schmeckt sign glow above a full dance floor.","visible":true},
+        {"type":"image","src":"images/2025/Schmecktgarten/IMG_9381.webp","year":2025,"eventDate":"2025-05-25","isMisc":false,"event":"Schmecktgarten 2025","eventEn":"Schmecktgarten 2025","tags":["Open Air","Laser","Lichtkunst"],"alt":"Blaue und violette Strahlen kreuzen sich über dem Publikum vor der Bühne.","altEn":"Blue and violet beams cross above the audience before the stage.","visible":true},
+
+        {"type":"image","src":"images/2025/S\u00fcdhof/DSCF5509.webp","year":2025,"eventDate":"2025-05-10","isMisc":false,"event":"Südhof 2025","eventEn":"Südhof 2025","tags":["Innenraum","Lichtkunst"],"alt":"Türkises und rotes Licht zeichnet Muster auf die Zeltdecke über dem Publikum.","altEn":"Turquoise and red light draws patterns across the marquee roof above the audience.","visible":true},
+        {"type":"image","src":"images/2025/S\u00fcdhof/DSCF5593.webp","year":2025,"eventDate":"2025-05-10","isMisc":false,"event":"Südhof 2025","eventEn":"Südhof 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Blaue Spots und ein roter Lichtring schweben über der Südhof-Bühne.","altEn":"Blue spotlights and a red light ring hover above the Südhof stage.","visible":true},
+        {"type":"image","src":"images/2025/S\u00fcdhof/IMG_0654.webp","year":2025,"eventDate":"2025-05-10","isMisc":false,"event":"Südhof 2025","eventEn":"Südhof 2025","tags":["Innenraum","Lichtkunst"],"alt":"Gelbe und violette Strahlen leuchten durch den Nebel über dem Zeltpublikum.","altEn":"Yellow and violet beams shine through haze above the marquee audience.","visible":true},
+
+        {"type":"image","src":"images/2025/Divers/Beamer-Beam.webp","year":2025,"eventDate":"2025-12-31","isMisc":true,"event":"Divers 2025","eventEn":"Miscellaneous 2025","tags":["Technik","Lichtkunst"],"alt":"Ein Projektor fächert einen hellen Strahl in Regenbogenfarben auf.","altEn":"A projector spreads a bright beam into rainbow colors.","visible":true},
+        {"type":"image","src":"images/2025/Divers/Blackwood-Filmfestival.webp","year":2025,"eventDate":"2025-12-31","isMisc":true,"event":"Divers 2025","eventEn":"Miscellaneous 2025","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Grüne Laserlinien verlaufen über das Publikum unter einer Stoffdecke.","altEn":"Green laser lines pass above the audience beneath a fabric ceiling.","visible":true},
+        {"type":"image","src":"images/2025/Divers/Findus_Rufetto_1.webp","year":2025,"eventDate":"2025-12-31","isMisc":true,"event":"Divers 2025","eventEn":"Miscellaneous 2025","tags":["Innenraum","Installation","Laser","Lichtkunst"],"alt":"Ein schmaler dekorierter Raum wird von orangefarbenen und violetten Strahlen durchzogen.","altEn":"Orange and violet beams run through a narrow decorated room.","visible":true},
+        {"type":"image","src":"images/2025/Divers/Findus_Rufetto_2.webp","year":2025,"eventDate":"2025-12-31","isMisc":true,"event":"Divers 2025","eventEn":"Miscellaneous 2025","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Blaue und violette Beleuchtung verwandelt einen leeren dekorierten Veranstaltungsraum.","altEn":"Blue and violet lighting transforms an empty decorated event space.","visible":true},
+
+        {"type":"image","src":"images/2024/Blackwood Filmfestival/IMG_0807.webp","year":2024,"eventDate":"2024-10-20","isMisc":false,"event":"Blackwood Filmfestival 2024","eventEn":"Blackwood Filmfestival 2024","tags":["Innenraum","Technik","Aufbau","Lichtkunst"],"alt":"Warme Lichtkegel fallen während der Einrichtung auf Bühne und leere Stuhlreihen.","altEn":"Warm beams fall across the stage and empty rows of chairs during setup.","visible":true},
+        {"type":"image","src":"images/2024/Blackwood Filmfestival/IMG_0815.webp","year":2024,"eventDate":"2024-10-20","isMisc":false,"event":"Blackwood Filmfestival 2024","eventEn":"Blackwood Filmfestival 2024","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Rote und blaue Laserfächer spannen sich über das Publikum.","altEn":"Red and blue laser fans stretch above the audience.","visible":true},
+        {"type":"image","src":"images/2024/Blackwood Filmfestival/IMG_0822.webp","year":2024,"eventDate":"2024-10-20","isMisc":false,"event":"Blackwood Filmfestival 2024","eventEn":"Blackwood Filmfestival 2024","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Grüne Laserfächer breiten sich über dem Publikum im Saal aus.","altEn":"Green laser fans spread above the audience in the hall.","visible":true},
+        {"type":"image","src":"images/2024/Blackwood Filmfestival/IMG_0842.webp","year":2024,"eventDate":"2024-10-20","isMisc":false,"event":"Blackwood Filmfestival 2024","eventEn":"Blackwood Filmfestival 2024","tags":["Innenraum","Lichtkunst"],"alt":"Magenta und blaues Bühnenlicht taucht das Publikum in Farbe.","altEn":"Magenta and blue stage light immerse the audience in color.","visible":true},
+
+        {"type":"image","src":"images/2024/Proseccival/20240822_135753.webp","year":2024,"eventDate":"2024-08-24","isMisc":false,"event":"Proseccival 2024","eventEn":"Proseccival 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Ein roter geometrischer Leuchtring umgibt eine Spiegelkugel unter dem Holzdach.","altEn":"A red geometric light ring surrounds a mirror ball beneath the wooden roof.","visible":true},
+        {"type":"image","src":"images/2024/Proseccival/IMG_0562.webp","year":2024,"eventDate":"2024-08-24","isMisc":false,"event":"Proseccival 2024","eventEn":"Proseccival 2024","tags":["Innenraum","Laser","Installation"],"alt":"Grüne Laserstrahlen laufen zwischen hängender Dekoration über eine Tanzfläche.","altEn":"Green laser beams pass between hanging decorations above a dance floor.","visible":true},
+
+        {"type":"image","src":"images/2024/Kirnhalden/20240616_013633.webp","year":2024,"eventDate":"2024-06-16","isMisc":false,"event":"Kirnhalden 2024","eventEn":"Kirnhalden 2024","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Cyan- und pinkfarbenes Bühnenlicht leuchtet über Publikum und Lichtsteuerung.","altEn":"Cyan and pink stage light shines above the audience and lighting controls.","visible":true},
+        {"type":"image","src":"images/2024/Kirnhalden/7F061008-7716-4248-9C51-C567BF2F24C7_1_102_o.webp","year":2024,"eventDate":"2024-06-16","isMisc":false,"event":"Kirnhalden 2024","eventEn":"Kirnhalden 2024","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Violette und blaue Laserfächer öffnen sich über einer leeren Tanzfläche.","altEn":"Violet and blue laser fans open above an empty dance floor.","visible":true},
+        {"type":"image","src":"images/2024/Kirnhalden/photonen-kirnhalden-24-67.webp","year":2024,"eventDate":"2024-06-16","isMisc":false,"event":"Kirnhalden 2024","eventEn":"Kirnhalden 2024","tags":["Technik","Aufbau"],"alt":"Ein mobiles Steuergerät liegt auf einem Holztisch vor der beleuchteten Bühne.","altEn":"A mobile control unit rests on a wooden table before the lit stage.","visible":true},
+        {"type":"image","src":"images/2024/Kirnhalden/photonen-kirnhalden-24-87.webp","year":2024,"eventDate":"2024-06-16","isMisc":false,"event":"Kirnhalden 2024","eventEn":"Kirnhalden 2024","tags":["Innenraum","Laser","Installation"],"alt":"Grüne Laserlinien kreuzen den gesamten Veranstaltungsraum.","altEn":"Green laser lines cross the entire event space.","visible":true},
+
+        {"type":"image","src":"images/2024/S\u00fcdhof/20240503_210821.webp","year":2024,"eventDate":"2024-05-04","isMisc":false,"event":"Südhof 2024","eventEn":"Südhof 2024","tags":["Innenraum","Installation","Aufbau"],"alt":"Rote fünfeckige Lichtobjekte und Traversen hängen während des Aufbaus im Zelt.","altEn":"Red pentagonal light objects and trusses hang in the marquee during setup.","visible":true},
+        {"type":"image","src":"images/2024/S\u00fcdhof/20240504_214915.webp","year":2024,"eventDate":"2024-05-04","isMisc":false,"event":"Südhof 2024","eventEn":"Südhof 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Blaue Lichtkegel treffen auf schwebende geometrische Körper unter der Zeltdecke.","altEn":"Blue beams meet suspended geometric forms beneath the marquee roof.","visible":true},
+
+        {"type":"image","src":"images/2024/Steinregen/20240420_001734.webp","year":2024,"eventDate":"2024-04-20","isMisc":false,"event":"Steinregen 2024","eventEn":"Steinregen 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Türkise diagonale Lichtlinien stehen hinter einer Silhouette am Pult.","altEn":"Turquoise diagonal light lines stand behind a silhouette at the desk.","visible":true},
+        {"type":"image","src":"images/2024/Steinregen/20240420_203008.webp","year":2024,"eventDate":"2024-04-20","isMisc":false,"event":"Steinregen 2024","eventEn":"Steinregen 2024","tags":["Innenraum","Lichtkunst"],"alt":"Eine gelbe sternförmige Projektion leuchtet durch den Gewölberaum.","altEn":"A yellow star-shaped projection shines through the vaulted room.","visible":true},
+
+        {"type":"image","src":"images/2024/Divers/20240119_232427.webp","year":2024,"eventDate":"2024-12-31","isMisc":true,"event":"Divers 2024","eventEn":"Miscellaneous 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Eine symmetrische rot-blaue Lichtinstallation rahmt ein DJ-Pult.","altEn":"A symmetrical red-and-blue light installation frames a DJ booth.","visible":true},
+        {"type":"image","src":"images/2024/Divers/5c7e046a-e1d6-4d65-9ea9-a3ccb813e874.webp","year":2024,"eventDate":"2024-12-31","isMisc":true,"event":"Divers 2024","eventEn":"Miscellaneous 2024","tags":["Innenraum","Laser","Lichtkunst"],"alt":"Blaue Strahlen fächern sich aus einem dunklen, dekorierten Raum auf.","altEn":"Blue beams fan out across a dark, decorated room.","visible":true},
+        {"type":"image","src":"images/2024/Divers/IMG_0962.webp","year":2024,"eventDate":"2024-12-31","isMisc":true,"event":"Divers 2024","eventEn":"Miscellaneous 2024","tags":["Innenraum","Laser","Installation"],"alt":"Mehrfarbige Laserstrahlen durchziehen einen Raum mit hängenden Lichtobjekten.","altEn":"Multicolored laser beams cross a room with suspended light objects.","visible":true},
+        {"type":"image","src":"images/2024/Divers/LED_Decke.webp","year":2024,"eventDate":"2024-12-31","isMisc":true,"event":"Divers 2024","eventEn":"Miscellaneous 2024","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Rote lineare Leuchten und sechseckige Elemente bilden eine grafische LED-Decke.","altEn":"Red linear lights and hexagonal elements form a graphic LED ceiling.","visible":true},
+
+        {"type":"image","src":"images/2023/Keller DJ Set/20230825_215803.webp","year":2023,"eventDate":"2023-08-26","isMisc":false,"event":"Keller DJ Set 2023","eventEn":"Keller DJ Set 2023","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Ein DJ spielt hinter einem Pult im pink und violett beleuchteten Keller.","altEn":"A DJ performs behind a booth in a basement lit pink and violet.","visible":true},
+        {"type":"image","src":"images/2023/Keller DJ Set/20230826_023800.webp","year":2023,"eventDate":"2023-08-26","isMisc":false,"event":"Keller DJ Set 2023","eventEn":"Keller DJ Set 2023","tags":["Innenraum","Technik","Lichtkunst"],"alt":"Grünes Licht erfüllt den Keller mit DJ-Technik und sitzendem Publikum.","altEn":"Green light fills the basement with DJ equipment and a seated audience.","visible":true},
+
+        {"type":"image","src":"images/2023/Divers/20230506_214900.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Pinke Fünfecke und blaue Ringe schweben über einer Tanzfläche.","altEn":"Pink pentagons and blue rings float above a dance floor.","visible":true},
+        {"type":"image","src":"images/2023/Divers/20230518_004455.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Innenraum","Installation","Lichtkunst"],"alt":"Rote Lichtkörper ordnen sich strahlenförmig um eine Spiegelkugel.","altEn":"Red luminous forms radiate around a mirror ball.","visible":true},
+        {"type":"image","src":"images/2023/Divers/20230804_021519.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Open Air","Installation","Lichtkunst"],"alt":"Eine kleine Holzstruktur leuchtet blau zwischen farbig angestrahlten Bäumen.","altEn":"A small wooden structure glows blue among colorfully illuminated trees.","visible":true},
+        {"type":"image","src":"images/2023/Divers/20230819_215627.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Open Air","Lichtkunst"],"alt":"Rotes, violettes und grünes Licht verwandelt einen Wald bei Nacht.","altEn":"Red, violet, and green light transforms a forest at night.","visible":true},
+        {"type":"image","src":"images/2023/Divers/IMG_0864.webp","year":2023,"eventDate":"2023-12-31","isMisc":true,"event":"Divers 2023","eventEn":"Miscellaneous 2023","tags":["Open Air","Laser","Lichtkunst"],"alt":"Blaue Lichtstrahlen steigen über einem nebligen Außengelände in den Nachthimmel.","altEn":"Blue beams rise above a hazy outdoor venue into the night sky.","visible":true}
+      ]
+    }
+  </script>
+
+  <script>
+    (function () {
+      let storage = null;
+      try {
+        storage = window.localStorage;
+      } catch {
+        storage = null;
+      }
+
+      window.languageController = PhotonenLanguage.initialize({
+        document,
+        navigator,
+        storage,
+        language: document.documentElement.dataset.initialLanguage
+      });
+    })();
+  </script>
+
+  <script data-role="hero-rotation">
+    (function () {
+      const heroImages = Array.from(document.querySelectorAll(".hero-media img"));
+      const galleryDataElement = document.getElementById("gallery-data");
+
+      if (heroImages.length < 2 || !galleryDataElement) return;
+
+      const galleryData = JSON.parse(galleryDataElement.textContent);
+      const heroSources = galleryData.images
+        .filter(function (image) {
+          return image.visible && image.type !== "video";
+        })
+        .map(function (image) {
+          return image.src;
+        });
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let activeImage = heroImages.find(function (image) {
+        return image.classList.contains("is-active");
+      }) || heroImages[0];
+      let standbyImage = heroImages.find(function (image) {
+        return image !== activeImage;
+      });
+      let currentSource = activeImage.getAttribute("src");
+      let sourceQueue = shuffleSources(heroSources.filter(function (source) {
+        return source !== currentSource;
+      }));
+
+      function shuffleSources(sources) {
+        const shuffled = sources.slice();
+
+        for (let index = shuffled.length - 1; index > 0; index -= 1) {
+          const swapIndex = Math.floor(Math.random() * (index + 1));
+          const currentValue = shuffled[index];
+          shuffled[index] = shuffled[swapIndex];
+          shuffled[swapIndex] = currentValue;
+        }
+
+        return shuffled;
+      }
+
+      function createNextRound() {
+        const nextRound = shuffleSources(heroSources);
+
+        if (nextRound.length > 1 && nextRound[0] === currentSource) {
+          const swapIndex = nextRound.findIndex(function (source) {
+            return source !== currentSource;
+          });
+          const firstSource = nextRound[0];
+          nextRound[0] = nextRound[swapIndex];
+          nextRound[swapIndex] = firstSource;
+        }
+
+        return nextRound;
+      }
+
+      function rotateHeroImage() {
+        if (!sourceQueue.length) {
+          sourceQueue = createNextRound();
+        }
+
+        const nextSource = sourceQueue.shift();
+        if (!nextSource) return;
+        const preloader = new Image();
+
+        preloader.onload = function () {
+          if (reduceMotion) {
+            activeImage.src = nextSource;
+            currentSource = nextSource;
+            return;
+          }
+
+          standbyImage.src = nextSource;
+          standbyImage.classList.add("is-active");
+          activeImage.classList.remove("is-active");
+
+          const previousImage = activeImage;
+          activeImage = standbyImage;
+          standbyImage = previousImage;
+          currentSource = nextSource;
+        };
+        preloader.src = nextSource;
+      }
+
+      window.setInterval(rotateHeroImage, 5000);
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const header = document.getElementById("site-header");
+      const nav = document.getElementById("site-nav");
+      const navToggle = document.querySelector(".nav-toggle");
+      const navLinks = nav.querySelectorAll("a");
+      const galleryData = JSON.parse(document.getElementById("gallery-data").textContent);
+      const tagFilters = document.getElementById("tag-filters");
+      const eventGroups = document.getElementById("event-groups");
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImage = document.getElementById("lightbox-image");
+      const lightboxVideo = document.getElementById("lightbox-video");
+      const lightboxCaption = document.getElementById("lightbox-caption");
+      const galleryHelpers = window.PhotonenGallery;
+      const languageController = window.languageController;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const visibleImages = galleryHelpers.sortItems(galleryData.images.filter(function (image) {
+        return image.visible;
+      }));
+      let activeTag = "Alle";
+      let activeImages = visibleImages;
+      let activeImage = 0;
+      let revealObserver;
+
+      function currentLanguage() {
+        return languageController ? languageController.language : document.documentElement.lang;
+      }
+
+      function translate(key) {
+        return languageController ? languageController.translate(key) : key;
+      }
+
+      function message(key, replacements) {
+        return Object.entries(replacements || {}).reduce(function (value, replacement) {
+          return value.split("{" + replacement[0] + "}").join(String(replacement[1]));
+        }, translate(key));
+      }
+
+      function localizedEvent(image) {
+        return currentLanguage() === "en" ? image.eventEn || image.event : image.event;
+      }
+
+      function localizedAlt(image) {
+        return currentLanguage() === "en" ? image.altEn || image.alt : image.alt;
+      }
+
+      function localizedTag(tag) {
+        if (tag === "Alle") return translate("gallery.all");
+        const labels = galleryData.tagLabels[currentLanguage()] || galleryData.tagLabels.de;
+        return labels[tag] || galleryData.tagLabels.de[tag] || tag;
+      }
+
+      function setMenu(open) {
+        navToggle.setAttribute("aria-expanded", String(open));
+        navToggle.dataset.i18nAriaLabel = open ? "menu.close" : "menu.open";
+        navToggle.setAttribute(
+          "aria-label",
+          translate(open ? "menu.close" : "menu.open")
+        );
+        nav.classList.toggle("is-open", open);
+        document.body.classList.toggle("menu-open", open);
+      }
+
+      navToggle.addEventListener("click", function () {
+        setMenu(navToggle.getAttribute("aria-expanded") !== "true");
+      });
+
+      navLinks.forEach(function (link) {
+        link.addEventListener("click", function () {
+          setMenu(false);
+        });
+      });
+
+      window.addEventListener("scroll", function () {
+        header.classList.toggle("is-scrolled", window.scrollY > 24);
+      }, { passive: true });
+
+      function watchReveals(root) {
+        const revealItems = root.querySelectorAll(".reveal:not(.is-visible)");
+
+        if (reduceMotion || !("IntersectionObserver" in window)) {
+          revealItems.forEach(function (item) {
+            item.classList.add("is-visible");
+          });
+          return;
+        }
+
+        if (!revealObserver) {
+          revealObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          }, {
+            threshold: 0.12,
+            rootMargin: "0px 0px -8% 0px"
+          });
+        }
+
+        revealItems.forEach(function (item) {
+          revealObserver.observe(item);
+        });
+      }
+
+      function renderTagFilters() {
+        const availableTags = new Set(visibleImages.flatMap(function (image) {
+          return image.tags;
+        }));
+        const orderedTags = ["Alle"].concat(galleryData.tagOrder.filter(function (tag) {
+          return availableTags.has(tag);
+        }));
+
+        tagFilters.replaceChildren();
+
+        orderedTags.forEach(function (tag) {
+          const button = document.createElement("button");
+          button.className = "tag-filter";
+          button.type = "button";
+          button.textContent = localizedTag(tag);
+          button.setAttribute("aria-pressed", String(tag === activeTag));
+          button.addEventListener("click", function () {
+            activeTag = tag;
+            renderTagFilters();
+            renderGallery();
+          });
+          tagFilters.appendChild(button);
+        });
+      }
+
+      function renderGallery() {
+        activeImages = visibleImages.filter(function (image) {
+          return activeTag === "Alle" || image.tags.includes(activeTag);
+        });
+        const groupedImages = galleryHelpers.groupItems(activeImages);
+        eventGroups.replaceChildren();
+
+        groupedImages.forEach(function (eventGroup) {
+          const images = eventGroup.items;
+          const group = document.createElement("section");
+          const heading = document.createElement("header");
+          const title = document.createElement("h3");
+          const meta = document.createElement("span");
+          const gallery = document.createElement("div");
+
+          group.className = "event-group";
+          heading.className = "event-group-head reveal";
+          title.className = "event-title";
+          meta.className = "event-meta";
+          gallery.className = "gallery";
+          const displayEventName = localizedEvent(images[0]);
+          gallery.setAttribute(
+            "aria-label",
+            message("gallery.imagesByEvent", { event: displayEventName })
+          );
+          title.textContent = displayEventName;
+          meta.textContent = images.length === 1
+            ? translate("gallery.countOne")
+            : message("gallery.countMany", { count: images.length });
+
+          images.forEach(function (image) {
+            const globalIndex = activeImages.indexOf(image);
+            const video = galleryHelpers.isVideo(image);
+            const button = document.createElement("button");
+            const imageWrap = document.createElement("span");
+            const element = document.createElement("img");
+
+            button.className = "gallery-item reveal" + (video ? " is-video" : "");
+            button.type = "button";
+            button.dataset.index = String(globalIndex);
+            button.setAttribute(
+              "aria-label",
+              message(video ? "gallery.openVideo" : "gallery.openImage", {
+                event: displayEventName
+              })
+            );
+            imageWrap.className = "image-wrap";
+            imageWrap.dataset.openLabel = translate(video ? "gallery.play" : "gallery.open");
+            element.src = video ? image.poster : image.src;
+            element.alt = localizedAlt(image);
+            element.loading = "lazy";
+            element.decoding = "async";
+            imageWrap.appendChild(element);
+
+            if (video) {
+              const cue = document.createElement("span");
+              cue.className = "video-cue";
+              cue.setAttribute("aria-hidden", "true");
+              cue.textContent = galleryHelpers.formatDuration(image.duration);
+              imageWrap.appendChild(cue);
+            }
+
+            button.appendChild(imageWrap);
+            button.addEventListener("click", function () {
+              paintLightbox(globalIndex);
+              lightbox.showModal();
+            });
+            gallery.appendChild(button);
+          });
+
+          heading.append(title, meta);
+          group.append(heading, gallery);
+          eventGroups.appendChild(group);
+        });
+
+        watchReveals(eventGroups);
+      }
+
+      function clearLightboxVideo() {
+        lightboxVideo.pause();
+        lightboxVideo.removeAttribute("src");
+        lightboxVideo.removeAttribute("poster");
+        lightboxVideo.removeAttribute("aria-label");
+        lightboxVideo.load();
+        lightboxVideo.hidden = true;
+        lightboxImage.hidden = false;
+      }
+
+      function paintLightbox(index) {
+        activeImage = (index + activeImages.length) % activeImages.length;
+        const image = activeImages[activeImage];
+        const video = galleryHelpers.isVideo(image);
+
+        clearLightboxVideo();
+
+        if (video) {
+          lightboxImage.hidden = true;
+          lightboxVideo.hidden = false;
+          lightboxVideo.src = image.src;
+          lightboxVideo.poster = image.poster;
+          lightboxVideo.setAttribute("aria-label", localizedAlt(image));
+          lightboxVideo.load();
+        } else {
+          lightboxImage.src = image.src;
+          lightboxImage.alt = localizedAlt(image);
+        }
+
+        lightboxCaption.textContent =
+          String(activeImage + 1).padStart(2, "0") +
+          " / " +
+          String(activeImages.length).padStart(2, "0") +
+          " — " +
+          localizedEvent(image) +
+          " · " +
+          image.tags.map(localizedTag).join(" / ");
+      }
+
+      lightbox.querySelector(".lightbox-close").addEventListener("click", function () {
+        lightbox.close();
+      });
+
+      lightbox.querySelector("[data-lightbox-prev]").addEventListener("click", function () {
+        paintLightbox(activeImage - 1);
+      });
+
+      lightbox.querySelector("[data-lightbox-next]").addEventListener("click", function () {
+        paintLightbox(activeImage + 1);
+      });
+
+      lightbox.addEventListener("click", function (event) {
+        if (event.target === lightbox) lightbox.close();
+      });
+
+      lightbox.addEventListener("close", clearLightboxVideo);
+
+      document.addEventListener("keydown", function (event) {
+        if (!lightbox.open) return;
+        if (event.key === "ArrowLeft") paintLightbox(activeImage - 1);
+        if (event.key === "ArrowRight") paintLightbox(activeImage + 1);
+      });
+
+      document.addEventListener("photonenkollektiv:languagechange", function () {
+        setMenu(navToggle.getAttribute("aria-expanded") === "true");
+        renderTagFilters();
+        renderGallery();
+        if (lightbox.open && activeImages.length) paintLightbox(activeImage);
+      });
+
+      renderTagFilters();
+      renderGallery();
+      watchReveals(document);
+    })();
+  </script>
+</body>
+</html>
